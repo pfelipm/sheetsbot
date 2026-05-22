@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('style'); ?>
+    <!-- Marked.js para renderizar Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </head>
+  <body>
+    <div class="chat-container">
+      <header>
+        <h1>🤖 SheetsBot</h1>
+        <p>Asistente impulsado por Gemini</p>
+      </header>
+      
+      <div id="chat-messages" class="chat-messages">
+        <div class="message bot-message">
+          ¡Hola! Soy tu asistente inteligente. ¿En qué puedo ayudarte hoy?
+        </div>
+      </div>
+      
+      <div class="input-container">
+        <form id="chat-form">
+          <input type="text" id="user-input" placeholder="Escribe tu mensaje aquí..." autocomplete="off">
+          <button type="submit" id="send-button">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <?!= include('script'); ?>
+  </body>
+</html>

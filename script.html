@@ -1,0 +1,72 @@
+<script>
+  const chatForm = document.getElementById('chat-form');
+  const userInput = document.getElementById('user-input');
+  const chatMessages = document.getElementById('chat-messages');
+  const sendButton = document.getElementById('send-button');
+  
+  let chatHistory = [];
+
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const message = userInput.value.trim();
+    if (!message) return;
+
+    appendMessage('user', message);
+    userInput.value = '';
+    
+    // Desactivar entrada mientras espera respuesta
+    setLoading(true);
+
+    google.script.run
+      .withSuccessHandler((response) => {
+        setLoading(false);
+        if (response.success) {
+          appendMessage('bot', response.text);
+          // Actualizar historial local
+          chatHistory.push({ role: 'user', text: message });
+          chatHistory.push({ role: 'model', text: response.text });
+        } else {
+          appendMessage('bot', '❌ Error: ' + response.error);
+        }
+      })
+      .withFailureHandler((err) => {
+        setLoading(false);
+        appendMessage('bot', '❌ Error crítico en el servidor.');
+        console.error(err);
+      })
+      .processMessage(message, chatHistory);
+  });
+
+  function appendMessage(role, text) {
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message');
+    messageDiv.classList.add(role === 'user' ? 'user-message' : 'bot-message');
+    
+    if (role === 'bot') {
+      // Usar marked para renderizar markdown en las respuestas del bot
+      messageDiv.innerHTML = marked.parse(text);
+    } else {
+      messageDiv.textContent = text;
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function setLoading(isLoading) {
+    userInput.disabled = isLoading;
+    sendButton.disabled = isLoading;
+    
+    if (isLoading) {
+      const typingDiv = document.createElement('div');
+      typingDiv.id = 'typing-indicator';
+      typingDiv.classList.add('typing');
+      typingDiv.textContent = 'Gemini está escribiendo...';
+      chatMessages.appendChild(typingDiv);
+    } else {
+      const typingDiv = document.getElementById('typing-indicator');
+      if (typingDiv) typingDiv.remove();
+    }
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+</script>

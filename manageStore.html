@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body { font-family: 'Segoe UI', sans-serif; padding: 15px; color: #333; margin: 0; }
+      h3 { color: #1a73e8; margin-top: 0; }
+      .controls { margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap; }
+      .btn { 
+        padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; 
+        background: #f8f9fa; cursor: pointer; font-size: 13px;
+        transition: all 0.2s;
+      }
+      .btn:hover { background: #e9ecef; }
+      .btn-danger { color: #d32f2f; border-color: #f8d7da; }
+      .btn-danger:hover { background: #f8d7da; }
+      .btn-primary { background: #1a73e8; color: white; border-color: #1a73e8; }
+      .btn-primary:hover { background: #1557b0; }
+      
+      .table-container { 
+        max-height: 300px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px;
+        margin-bottom: 15px;
+      }
+      table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      th { background: #f8f9fa; text-align: left; padding: 10px; border-bottom: 2px solid #eee; position: sticky; top: 0; }
+      td { padding: 10px; border-bottom: 1px solid #eee; }
+      tr:hover { background: #fcfcfc; }
+      
+      .footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; }
+      .loading { text-align: center; padding: 20px; color: #666; }
+      
+      input[type="checkbox"] { cursor: pointer; }
+
+      /* Custom Dialog Styles */
+      #dialog-overlay {
+        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 1000;
+        justify-content: center; align-items: center;
+      }
+      #custom-dialog {
+        background: white; padding: 20px; border-radius: 8px; max-width: 80%;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-align: center;
+      }
+      #dialog-msg { margin-bottom: 20px; line-height: 1.4; font-size: 14px; }
+      .dialog-btns { display: flex; gap: 10px; justify-content: center; }
+    </style>
+  </head>
+  <body>
+    <div id="dialog-overlay">
+      <div id="custom-dialog">
+        <div id="dialog-msg"></div>
+        <div class="dialog-btns" id="dialog-actions"></div>
+      </div>
+    </div>
+
+    <div id="main-content">
+      <div id="content">
+        <div class="loading">Cargando documentos...</div>
+      </div>
+    </div>
+
+    <script>
+      let documents = [];
+
+      window.onload = loadDocuments;
+
+      function customAlert(msg) {
+        showDialog(msg, [{ label: 'Aceptar', type: 'primary', callback: closeDialog }]);
+      }
+
+      function customConfirm(msg, onConfirm) {
+        showDialog(msg, [
+          { label: 'Cancelar', type: 'default', callback: closeDialog },
+          { label: 'Confirmar', type: 'danger', callback: () => { closeDialog(); onConfirm(); } }
+        ]);
+      }
+
+      function showDialog(msg, actions) {
+        document.getElementById('dialog-msg').innerHTML = msg;
+        const actionsContainer = document.getElementById('dialog-actions');
+        actionsContainer.innerHTML = '';
+        
+        actions.forEach(action => {
+          const btn = document.createElement('button');
+          btn.className = 'btn ' + (action.type === 'primary' ? 'btn-primary' : action.type === 'danger' ? 'btn-danger' : '');
+          btn.textContent = action.label;
+          btn.onclick = action.callback;
+          actionsContainer.appendChild(btn);
+        });
+        
+        document.getElementById('dialog-overlay').style.display = 'flex';
+      }
+
+      function closeDialog() {
+        document.getElementById('dialog-overlay').style.display = 'none';
+      }
+
+      function loadDocuments() {
+        google.script.run
+          .withSuccessHandler(renderDocuments)
+          .withFailureHandler(showError)
+          .getStoreDocuments();
+      }
+
+      function renderDocuments(data) {
+        documents = data;
+        const container = document.getElementById('content');
+        
+        if (!documents || documents.length === 0) {
+          container.innerHTML = '<p>El almacén está vacío o aún no se ha creado.</p>';
+          renderFooter(false);
+          return;
+        }
+
+        let html = `
+          <div class="controls">
+            <button class="btn" onclick="selectAll(true)">Todos</button>
+            <button class="btn" onclick="selectAll(false)">Ninguno</button>
+            <button class="btn" onclick="invertSelection()">Invertir</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th width="30"></th>
+                  <th>Nombre del Archivo</th>
+                  <th width="120">Fecha de Subida</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        documents.forEach((doc, index) => {
+          const date = new Date(doc.createTime).toLocaleString();
+          html += `
+            <tr>
+              <td><input type="checkbox" class="doc-check" data-name="${doc.name}"></td>
+              <td>${doc.displayName || 'Sin nombre'}</td>
+              <td style="color: #666;">${date}</td>
+            </tr>
+          `;
+        });
+
+        html += '</tbody></table></div>';
+        container.innerHTML = html;
+        renderFooter(true);
+      }
+
+      function renderFooter(hasDocs) {
+        // Eliminar footer anterior si existe
+        const oldFooter = document.querySelector('.footer');
+        if (oldFooter) oldFooter.remove();
+
+        const footer = document.createElement('div');
+        footer.className = 'footer';
+        footer.innerHTML = `
+          <div>
+            <button class="btn btn-danger" onclick="handleDeleteSelected()" ${!hasDocs ? 'disabled' : ''}>Eliminar Seleccionados</button>
+          </div>
+          <button class="btn btn-danger" style="font-weight: bold;" onclick="handleDeleteStore()">ELIMINAR TODO EL STORE</button>
+        `;
+        document.getElementById('main-content').appendChild(footer);
+      }
+
+      function selectAll(val) {
+        document.querySelectorAll('.doc-check').forEach(cb => cb.checked = val);
+      }
+
+      function invertSelection() {
+        document.querySelectorAll('.doc-check').forEach(cb => cb.checked = !cb.checked);
+      }
+
+      function handleDeleteSelected() {
+        const selected = Array.from(document.querySelectorAll('.doc-check:checked')).map(cb => cb.dataset.name);
+        if (selected.length === 0) {
+          customAlert('Selecciona al menos un archivo para eliminar.');
+          return;
+        }
+
+        customConfirm(`¿Estás seguro de que quieres eliminar ${selected.length} archivo(s)?`, () => {
+          setLoading(true);
+          google.script.run
+            .withSuccessHandler(() => {
+              customAlert('Archivos eliminados correctamente.');
+              loadDocuments();
+            })
+            .withFailureHandler(showError)
+            .deleteSelectedDocuments(selected);
+        });
+      }
+
+      function handleDeleteStore() {
+        customConfirm('⚠️ ATENCIÓN: Esto eliminará permanentemente todos los archivos y el propio almacén de Gemini.<br><br>¿Deseas continuar?', () => {
+          setLoading(true);
+          google.script.run
+            .withSuccessHandler(() => {
+              // No podemos usar alert aquí si cerramos la ventana, pero podemos mostrar un mensaje final
+              showDialog('Store eliminado correctamente.', [{ label: 'Cerrar', type: 'primary', callback: () => google.script.host.close() }]);
+            })
+            .withFailureHandler(showError)
+            .deleteStoreComplete();
+        });
+      }
+
+      function setLoading(val) {
+        const container = document.getElementById('content');
+        const footer = document.querySelector('.footer');
+        if (val) {
+          container.innerHTML = '<div class="loading">Procesando solicitud...</div>';
+          if (footer) footer.style.display = 'none';
+        }
+      }
+
+      function showError(err) {
+        customAlert('Error: ' + err.message);
+        loadDocuments();
+      }
+    </script>
+  </body>
+</html>
