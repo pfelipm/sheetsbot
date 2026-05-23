@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
       body { 
-        font-family: 'Segoe UI', sans-serif; 
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
         padding: 0; 
         margin: 0; 
         color: #333; 
@@ -48,28 +48,43 @@
       .scroll-area {
         flex: 1;
         overflow-y: auto;
-        padding: 15px;
+        padding: 0;
       }
 
       .file-item {
-        padding: 6px 0;
+        padding: 12px 15px;
         border-bottom: 1px solid #f0f0f0;
-        font-size: 13px;
+        font-size: 14px;
         display: flex;
         align-items: center;
-        gap: 8px;
-        color: #5f6368;
+        justify-content: space-between;
+        transition: background 0.3s;
+      }
+
+      .file-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        overflow: hidden;
+      }
+
+      .file-name-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .status-indicator {
+        display: flex;
+        align-items: center;
+        min-width: 24px;
       }
 
       .mode-selection {
         padding: 20px;
         text-align: center;
-      }
-
-      .sync-active {
-        padding: 30px 20px;
-        text-align: center;
-        display: none;
+        background: #fafafa;
+        border-top: 1px solid #eee;
       }
 
       .results-area {
@@ -106,9 +121,6 @@
         box-shadow: none !important;
       }
       
-      .status-text { font-weight: 500; margin-bottom: 10px; display: block; }
-      .current-file { font-size: 12px; color: #888; font-style: italic; }
-
       .loading-container {
         display: flex;
         flex-direction: column;
@@ -118,7 +130,7 @@
         color: #5f6368;
       }
 
-      /* Custom Dialog Styles consistent with Material Design */
+      /* Custom Dialog Styles */
       #dialog-overlay {
         display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(0,0,0,0.4); z-index: 1000;
@@ -127,14 +139,28 @@
       #custom-dialog {
         background: white; padding: 24px; border-radius: 8px; width: 85%; max-width: 400px;
         box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-        text-align: left;
       }
       #dialog-msg { margin-bottom: 24px; line-height: 1.5; font-size: 14px; color: #3c4043; }
       .dialog-btns { display: flex; gap: 12px; justify-content: flex-end; }
+
+      /* Status Colors */
+      .sync-pending { color: #9e9e9e; }
+      .sync-working { color: #1a73e8; background: #e8f0fe; }
+      .sync-success { color: #2e7d32; }
+      .sync-error { color: #d32f2f; }
+
+      /* Miniature spinner */
+      .mini-spinner {
+        width: 18px; height: 18px;
+        border: 2px solid #e3f2fd;
+        border-top: 2px solid #1a73e8;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
   </head>
   <body>
-    <!-- Custom Dialog Overlay -->
     <div id="dialog-overlay">
       <div id="custom-dialog">
         <div id="dialog-msg"></div>
@@ -161,13 +187,13 @@
           <p style="margin-top: 15px;">Escaneando carpeta...</p>
         </div>
 
-        <!-- Estado 2: Previsualización y Selección de Modo -->
-        <div id="preview-ui" style="display: none; height: 100%; flex-direction: column;">
+        <!-- Estado 2 y 3: Previsualización y Sincronización -->
+        <div id="sync-ui" style="display: none; height: 100%; flex-direction: column;">
           <div class="scroll-area" id="file-list-container">
-            <p style="font-weight: 500; font-size: 14px; margin-top: 0;">Archivos encontrados:</p>
             <div id="file-list"></div>
           </div>
-          <div class="mode-selection">
+          
+          <div id="mode-selection-ui" class="mode-selection">
             <p style="font-size: 13px; margin-bottom: 15px; color: #666;">¿Cómo quieres sincronizar estos archivos?</p>
             <div style="display: flex; gap: 10px; justify-content: center;">
               <button class="btn btn-outline waves-effect" onclick="startSyncProcess('ADD')">Añadir nuevos</button>
@@ -176,15 +202,6 @@
             <div style="margin-top: 12px;">
               <a href="https://ai.google.dev/gemini-api/docs/file-search#supported-files" target="_blank" style="font-size: 11px; color: #9e9e9e; text-decoration: underline;">Tipos de archivos soportados</a>
             </div>
-          </div>
-        </div>
-
-        <!-- Estado 3: Sincronización activa -->
-        <div id="sync-ui" class="sync-active">
-          <span class="status-text" id="status-title">Iniciando...</span>
-          <span class="current-file" id="current-file-name">...</span>
-          <div class="progress blue lighten-4" style="margin: 25px 0;">
-            <div class="indeterminate blue accent-2"></div>
           </div>
         </div>
 
@@ -219,6 +236,7 @@
       let currentIndex = 0;
       let successCount = 0;
       let errorCount = 0;
+      let isSyncing = false;
 
       window.onload = () => {
         google.script.run
@@ -242,21 +260,15 @@
         document.getElementById('dialog-msg').innerHTML = msg;
         const actionsContainer = document.getElementById('dialog-actions');
         actionsContainer.innerHTML = '';
-        
         actions.forEach(action => {
           const btn = document.createElement('button');
-          if (action.type === 'primary') {
-            btn.className = 'btn-flat waves-effect waves-blue blue-text';
-          } else if (action.type === 'danger') {
-            btn.className = 'btn waves-effect waves-light red darken-2';
-          } else {
-            btn.className = 'btn-flat waves-effect waves-grey grey-text';
-          }
+          btn.className = (action.type === 'primary') ? 'btn-flat waves-effect waves-blue blue-text' : 
+                          (action.type === 'danger') ? 'btn waves-effect waves-light red darken-2' : 
+                          'btn-flat waves-effect waves-grey grey-text';
           btn.textContent = action.label;
           btn.onclick = action.callback;
           actionsContainer.appendChild(btn);
         });
-        
         document.getElementById('dialog-overlay').style.display = 'flex';
       }
 
@@ -267,19 +279,25 @@
       function showPreview(files) {
         fileList = files;
         document.getElementById('loading-files').style.display = 'none';
-        
-        const preview = document.getElementById('preview-ui');
-        preview.style.display = 'flex';
+        document.getElementById('sync-ui').style.display = 'flex';
 
         if (files.length === 0) {
-          document.getElementById('file-list').innerHTML = '<p class="grey-text">No hay archivos compatibles en la carpeta.</p>';
+          document.getElementById('file-list').innerHTML = '<div style="padding: 20px; text-align:center;" class="grey-text">No hay archivos compatibles.</div>';
           document.querySelectorAll('.mode-selection button').forEach(b => b.disabled = true);
           return;
         }
 
         let html = '';
-        files.forEach(f => {
-          html += `<div class="file-item"><i class="material-icons tiny">insert_drive_file</i>${f.name}</div>`;
+        files.forEach((f, i) => {
+          html += `
+            <div class="file-item sync-pending" id="file-row-${i}">
+              <div class="file-info">
+                <i class="material-icons tiny" id="icon-${i}">insert_drive_file</i>
+                <span class="file-name-text">${f.name}</span>
+              </div>
+              <div class="status-indicator" id="indicator-${i}"></div>
+            </div>
+          `;
         });
         document.getElementById('file-list').innerHTML = html;
       }
@@ -291,10 +309,9 @@
       }
 
       function startSyncProcess(mode) {
-        document.getElementById('preview-ui').style.display = 'none';
-        document.getElementById('sync-ui').style.display = 'block';
-        document.getElementById('status-title').textContent = 'Preparando almacén...';
-
+        isSyncing = true;
+        document.getElementById('mode-selection-ui').style.display = 'none';
+        
         google.script.run
           .withSuccessHandler(() => {
             syncNextFile();
@@ -306,18 +323,38 @@
       function syncNextFile() {
         if (currentIndex < fileList.length) {
           const file = fileList[currentIndex];
-          document.getElementById('status-title').textContent = `Subiendo ${currentIndex + 1} de ${fileList.length}`;
-          document.getElementById('current-file-name').textContent = file.name;
+          const row = document.getElementById(`file-row-${currentIndex}`);
+          const indicator = document.getElementById(`indicator-${currentIndex}`);
+          const icon = document.getElementById(`icon-${currentIndex}`);
+
+          // Visual: Marcamos como trabajando
+          row.className = 'file-item sync-working';
+          indicator.innerHTML = '<div class="mini-spinner"></div>';
+          icon.textContent = 'sync';
+          
+          // Scroll automático al archivo actual
+          row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
           google.script.run
             .withSuccessHandler((res) => {
-              if (res.success) successCount++;
-              else errorCount++;
+              if (res.success) {
+                successCount++;
+                row.className = 'file-item sync-success';
+                indicator.innerHTML = '<i class="material-icons tiny">check_circle</i>';
+                icon.textContent = 'description';
+              } else {
+                errorCount++;
+                row.className = 'file-item sync-error';
+                indicator.innerHTML = '<i class="material-icons tiny">error</i>';
+                icon.textContent = 'report_problem';
+              }
               currentIndex++;
               syncNextFile();
             })
             .withFailureHandler(() => {
               errorCount++;
+              row.className = 'file-item sync-error';
+              indicator.innerHTML = '<i class="material-icons tiny">error</i>';
               currentIndex++;
               syncNextFile();
             })
@@ -339,15 +376,14 @@
           document.getElementById('result-title').textContent = 'Sincronización terminada';
           document.getElementById('result-icon').textContent = 'error_outline';
           document.getElementById('result-icon').className = 'material-icons orange-text';
-          document.getElementById('result-detail').textContent = 'Algunos archivos no se pudieron procesar. Revisa los logs de Apps Script para más detalles.';
+          document.getElementById('result-detail').textContent = 'Algunos archivos no se pudieron procesar.';
         } else {
-          document.getElementById('result-detail').textContent = 'Todos los archivos han sido indexados correctamente en el almacén de Gemini.';
+          document.getElementById('result-detail').textContent = 'Todos los archivos han sido indexados correctamente.';
         }
       }
 
       function handleCriticalError(err) {
         document.getElementById('loading-files').style.display = 'none';
-        document.getElementById('preview-ui').style.display = 'none';
         document.getElementById('sync-ui').style.display = 'none';
         const results = document.getElementById('results-ui');
         results.style.display = 'block';
