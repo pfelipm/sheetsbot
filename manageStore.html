@@ -2,47 +2,117 @@
 <html>
   <head>
     <base target="_top">
+    <!-- Importar Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Importar Iconos de Google -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-      body { font-family: 'Segoe UI', sans-serif; padding: 15px; color: #333; margin: 0; }
-      h3 { color: #1a73e8; margin-top: 0; }
-      .controls { margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap; }
-      .btn { 
-        padding: 6px 12px; border-radius: 4px; border: 1px solid #ccc; 
-        background: #f8f9fa; cursor: pointer; font-size: 13px;
-        transition: all 0.2s;
+      body { 
+        font-family: 'Segoe UI', sans-serif; 
+        padding: 0; 
+        margin: 0; 
+        color: #333; 
+        background-color: #f5f5f5;
+        overflow: hidden;
       }
-      .btn:hover { background: #e9ecef; }
-      .btn-danger { color: #d32f2f; border-color: #f8d7da; }
-      .btn-danger:hover { background: #f8d7da; }
-      .btn-primary { background: #1a73e8; color: white; border-color: #1a73e8; }
-      .btn-primary:hover { background: #1557b0; }
+      .header-container {
+        background-color: #1a73e8;
+        padding: 15px;
+        color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .header-container i { font-size: 24px; }
+      .header-container span { font-size: 18px; font-weight: 500; }
       
-      .table-container { 
-        max-height: 300px; overflow-y: auto; border: 1px solid #eee; border-radius: 4px;
+      #main-wrapper {
+        padding: 20px;
+        height: calc(100vh - 54px);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
         margin-bottom: 15px;
       }
-      table { width: 100%; border-collapse: collapse; font-size: 13px; }
-      th { background: #f8f9fa; text-align: left; padding: 10px; border-bottom: 2px solid #eee; position: sticky; top: 0; }
-      td { padding: 10px; border-bottom: 1px solid #eee; }
-      tr:hover { background: #fcfcfc; }
-      
-      .footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 15px; }
-      .loading { text-align: center; padding: 20px; color: #666; }
-      
-      input[type="checkbox"] { cursor: pointer; }
 
-      /* Custom Dialog Styles */
+      .controls { 
+        padding: 15px; 
+        display: flex; 
+        gap: 10px; 
+        border-bottom: 1px solid #eee;
+        background: #fafafa;
+      }
+      
+      .table-container { 
+        flex: 1;
+        overflow-y: auto;
+      }
+      
+      table.highlight > tbody > tr:hover {
+        background-color: rgba(26, 115, 232, 0.04);
+      }
+      
+      th { 
+        background: white; 
+        position: sticky; 
+        top: 0; 
+        z-index: 1;
+        color: #5f6368;
+        font-weight: 600;
+        font-size: 13px;
+        text-transform: uppercase;
+      }
+      
+      td { font-size: 14px; padding: 12px 10px; }
+      
+      .footer-actions { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+      }
+      
+      /* Custom Dialog Styles consistent with Material Design */
       #dialog-overlay {
         display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5); z-index: 1000;
+        background: rgba(0,0,0,0.4); z-index: 1000;
         justify-content: center; align-items: center;
       }
       #custom-dialog {
-        background: white; padding: 20px; border-radius: 8px; max-width: 80%;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-align: center;
+        background: white; padding: 24px; border-radius: 8px; width: 85%; max-width: 400px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
       }
-      #dialog-msg { margin-bottom: 20px; line-height: 1.4; font-size: 14px; }
-      .dialog-btns { display: flex; gap: 10px; justify-content: center; }
+      #dialog-msg { margin-bottom: 24px; line-height: 1.5; font-size: 15px; color: #3c4043; }
+      .dialog-btns { display: flex; gap: 12px; justify-content: flex-end; }
+      
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #5f6368;
+      }
+
+      .btn-small-flat {
+        padding: 0 8px;
+        font-size: 12px;
+        height: 28px;
+        line-height: 28px;
+        text-transform: none;
+      }
+      
+      .blue-text-theme { color: #1a73e8 !important; }
+      .btn-theme { background-color: #1a73e8 !important; }
     </style>
   </head>
   <body>
@@ -53,19 +123,45 @@
       </div>
     </div>
 
-    <div id="main-content">
-      <div id="content">
-        <div class="loading">Cargando documentos...</div>
+    <div class="header-container">
+      <i class="material-icons">storage</i>
+      <span>Gestor de Conocimiento</span>
+    </div>
+    
+    <div id="main-wrapper">
+      <div class="content-card">
+        <div id="content" style="height: 100%;">
+          <div class="loading-container">
+            <div class="preloader-wrapper small active">
+              <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left"><div class="circle"></div></div>
+                <div class="gap-patch"><div class="circle"></div></div>
+                <div class="circle-clipper right"><div class="circle"></div></div>
+              </div>
+            </div>
+            <p style="margin-top: 15px;">Cargando documentos...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-actions" id="footer-container" style="display: none;">
+        <button class="btn-flat waves-effect waves-red red-text text-darken-2" onclick="handleDeleteSelected()" id="btn-del-sel">
+          <i class="material-icons left">delete_sweep</i>Eliminar seleccionados
+        </button>
+        <button class="btn waves-effect waves-light red darken-2" onclick="handleDeleteStore()">
+          <i class="material-icons left">warning</i>Eliminar Store
+        </button>
       </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
       let documents = [];
 
       window.onload = loadDocuments;
 
       function customAlert(msg) {
-        showDialog(msg, [{ label: 'Aceptar', type: 'primary', callback: closeDialog }]);
+        showDialog(msg, [{ label: 'Entendido', type: 'primary', callback: closeDialog }]);
       }
 
       function customConfirm(msg, onConfirm) {
@@ -82,7 +178,13 @@
         
         actions.forEach(action => {
           const btn = document.createElement('button');
-          btn.className = 'btn ' + (action.type === 'primary' ? 'btn-primary' : action.type === 'danger' ? 'btn-danger' : '');
+          if (action.type === 'primary') {
+            btn.className = 'btn-flat waves-effect waves-blue blue-text text-theme';
+          } else if (action.type === 'danger') {
+            btn.className = 'btn waves-effect waves-light red darken-2';
+          } else {
+            btn.className = 'btn-flat waves-effect waves-grey grey-text';
+          }
           btn.textContent = action.label;
           btn.onclick = action.callback;
           actionsContainer.appendChild(btn);
@@ -96,6 +198,7 @@
       }
 
       function loadDocuments() {
+        setLoading(true, 'Cargando documentos...');
         google.script.run
           .withSuccessHandler(renderDocuments)
           .withFailureHandler(showError)
@@ -105,61 +208,56 @@
       function renderDocuments(data) {
         documents = data;
         const container = document.getElementById('content');
+        const footer = document.getElementById('footer-container');
         
         if (!documents || documents.length === 0) {
-          container.innerHTML = '<p>El almacén está vacío o aún no se ha creado.</p>';
-          renderFooter(false);
+          container.innerHTML = `
+            <div class="loading-container">
+              <i class="material-icons grey-text" style="font-size: 48px;">folder_open</i>
+              <p>El almacén está vacío o aún no se ha creado.</p>
+            </div>
+          `;
+          footer.style.display = 'none';
           return;
         }
 
         let html = `
           <div class="controls">
-            <button class="btn" onclick="selectAll(true)">Todos</button>
-            <button class="btn" onclick="selectAll(false)">Ninguno</button>
-            <button class="btn" onclick="invertSelection()">Invertir</button>
+            <button class="btn-flat btn-small-flat waves-effect waves-blue blue-text" onclick="selectAll(true)">Seleccionar todos</button>
+            <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="selectAll(false)">Ninguno</button>
+            <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="invertSelection()">Invertir</button>
           </div>
           <div class="table-container">
-            <table>
+            <table class="highlight">
               <thead>
                 <tr>
-                  <th width="30"></th>
-                  <th>Nombre del Archivo</th>
-                  <th width="120">Fecha de Subida</th>
+                  <th width="40" class="center-align"></th>
+                  <th>Documento</th>
+                  <th width="160">Fecha subida</th>
                 </tr>
               </thead>
               <tbody>
         `;
 
-        documents.forEach((doc, index) => {
+        documents.forEach((doc) => {
           const date = new Date(doc.createTime).toLocaleString();
           html += `
             <tr>
-              <td><input type="checkbox" class="doc-check" data-name="${doc.name}"></td>
-              <td>${doc.displayName || 'Sin nombre'}</td>
-              <td style="color: #666;">${date}</td>
+              <td class="center-align">
+                <label>
+                  <input type="checkbox" class="filled-in doc-check" data-name="${doc.name}" />
+                  <span></span>
+                </label>
+              </td>
+              <td style="font-weight: 500;">${doc.displayName || 'Sin nombre'}</td>
+              <td class="grey-text">${date}</td>
             </tr>
           `;
         });
 
         html += '</tbody></table></div>';
         container.innerHTML = html;
-        renderFooter(true);
-      }
-
-      function renderFooter(hasDocs) {
-        // Eliminar footer anterior si existe
-        const oldFooter = document.querySelector('.footer');
-        if (oldFooter) oldFooter.remove();
-
-        const footer = document.createElement('div');
-        footer.className = 'footer';
-        footer.innerHTML = `
-          <div>
-            <button class="btn btn-danger" onclick="handleDeleteSelected()" ${!hasDocs ? 'disabled' : ''}>Eliminar Seleccionados</button>
-          </div>
-          <button class="btn btn-danger" style="font-weight: bold;" onclick="handleDeleteStore()">ELIMINAR TODO EL STORE</button>
-        `;
-        document.getElementById('main-content').appendChild(footer);
+        footer.style.display = 'flex';
       }
 
       function selectAll(val) {
@@ -173,15 +271,15 @@
       function handleDeleteSelected() {
         const selected = Array.from(document.querySelectorAll('.doc-check:checked')).map(cb => cb.dataset.name);
         if (selected.length === 0) {
-          customAlert('Selecciona al menos un archivo para eliminar.');
+          customAlert('Por favor, selecciona al menos un archivo para eliminar.');
           return;
         }
 
-        customConfirm(`¿Estás seguro de que quieres eliminar ${selected.length} archivo(s)?`, () => {
-          setLoading(true);
+        customConfirm(`¿Estás seguro de que deseas eliminar <b>${selected.length}</b> archivo(s)?`, () => {
+          setLoading(true, 'Eliminando archivos...');
           google.script.run
             .withSuccessHandler(() => {
-              customAlert('Archivos eliminados correctamente.');
+              M.toast({html: 'Archivos eliminados correctamente'});
               loadDocuments();
             })
             .withFailureHandler(showError)
@@ -190,29 +288,43 @@
       }
 
       function handleDeleteStore() {
-        customConfirm('⚠️ ATENCIÓN: Esto eliminará permanentemente todos los archivos y el propio almacén de Gemini.<br><br>¿Deseas continuar?', () => {
-          setLoading(true);
+        customConfirm('⚠️ <b>ATENCIÓN</b>: Esto eliminará permanentemente todos los archivos y el propio almacén de Gemini.<br><br>¿Deseas continuar?', () => {
+          setLoading(true, 'Eliminando almacén completo...');
           google.script.run
             .withSuccessHandler(() => {
-              // No podemos usar alert aquí si cerramos la ventana, pero podemos mostrar un mensaje final
-              showDialog('Store eliminado correctamente.', [{ label: 'Cerrar', type: 'primary', callback: () => google.script.host.close() }]);
+              showDialog('El almacén se ha eliminado correctamente.', [{ 
+                label: 'Cerrar', 
+                type: 'primary', 
+                callback: () => google.script.host.close() 
+              }]);
             })
             .withFailureHandler(showError)
             .deleteStoreComplete();
         });
       }
 
-      function setLoading(val) {
+      function setLoading(val, text) {
+        if (!val) return;
         const container = document.getElementById('content');
-        const footer = document.querySelector('.footer');
-        if (val) {
-          container.innerHTML = '<div class="loading">Procesando solicitud...</div>';
-          if (footer) footer.style.display = 'none';
-        }
+        const footer = document.getElementById('footer-container');
+        
+        container.innerHTML = `
+          <div class="loading-container">
+            <div class="preloader-wrapper active">
+              <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left"><div class="circle"></div></div>
+                <div class="gap-patch"><div class="circle"></div></div>
+                <div class="circle-clipper right"><div class="circle"></div></div>
+              </div>
+            </div>
+            <p style="margin-top: 20px;">${text}</p>
+          </div>
+        `;
+        if (footer) footer.style.display = 'none';
       }
 
       function showError(err) {
-        customAlert('Error: ' + err.message);
+        customAlert('<b>Error</b>: ' + err.message);
         loadDocuments();
       }
     </script>
