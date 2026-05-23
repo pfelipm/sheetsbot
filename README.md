@@ -111,6 +111,7 @@ Si tienes sugerencias o encuentras errores, por favor abre un *issue* o envía u
 ### ✍️ Créditos
 
 *   **Autor:** Pablo Felip ([@pfelipm](https://twitter.com/pfelipm))
+*   **Agradecimiento especial:** A mi amigo y compañero en GEG Spain, [Alfredo Gilsanz](https://transformacioneducativa.es/equipo-coordinacion/), por darme el "empujoncito" final necesario para abordar este proyecto.
 *   **Licencia:** [GNU GPL v3.0](https://github.com/pfelipm/sheetsbot/blob/main/LICENSE)
 *   **Repositorio:** [https://github.com/pfelipm/sheetsbot](https://github.com/pfelipm/sheetsbot)
 
