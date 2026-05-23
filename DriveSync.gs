@@ -264,7 +264,7 @@ function showAbout() {
   const template = HtmlService.createTemplateFromFile('acercaDe');
   template.VERSION = VERSION;
   const html = template.evaluate()
-      .setWidth(450)
+      .setWidth(540)
       .setHeight(500);
   SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }
