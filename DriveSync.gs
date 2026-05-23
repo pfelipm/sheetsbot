@@ -35,12 +35,12 @@ function prepareStore(mode) {
   if (mode === 'CLEAN' && storeName) {
     // Borrar el store actual forzando
     const deleteUrl = `https://generativelanguage.googleapis.com/v1beta/${storeName}?key=${apiKey}&force=true`;
-    UrlFetchApp.fetch(deleteUrl, { method: 'delete', muteHttpExceptions: true });
+    fetchWithBackoff(deleteUrl, { method: 'delete', muteHttpExceptions: true });
     setConfigValue('ID_STORE_GEMINI', '');
     storeName = '';
   }
 
-  // Crear store si no existe (o si lo acabamos de borrar)
+  // Crear store si no existe (o si acabamos de borrarlo)
   if (!storeName) {
     storeName = createFileSearchStore(apiKey);
     setConfigValue('ID_STORE_GEMINI', storeName);
