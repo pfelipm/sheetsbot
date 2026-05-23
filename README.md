@@ -64,15 +64,19 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
 #### 1. Preparación de la Hoja
 La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora todo el código necesario:
 
-> 👉 **[Duplicar Plantilla de SheetsBot](https://docs.google.com/spreadsheets/d/1o9wLge7oQktrh9rWH0I8bcbnu_o8lXflzNgcu6nR8vw/edit?usp=sharing)**
-
-*(Si prefieres instalarlo manualmente en una hoja existente, puedes copiar el código de este repositorio y usar el comando **🚀 Inicializar Hoja** del menú).*
+> 👉 **[Plantilla de SheetsBot](https://docs.google.com/spreadsheets/d/1o9wLge7oQktrh9rWH0I8bcbnu_o8lXflzNgcu6nR8vw/edit?usp=sharing)**
 
 #### 2. Configuración del Bot
-*   **API_KEY**: Obtén tu clave en [Google AI Studio](https://aistudio.google.com/api-keys).
-*   **MODELO**: Elige el modelo (ej: `gemini-flash-latest`). Puedes consultar aquí la lista completa de [modelos y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations).
-*   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos de Drive.
-*   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta donde guardas tus documentos de conocimiento.
+*   **Ajustes de Inteligencia**:
+    *   **API_KEY**: Obtén tu clave en [Google AI Studio](https://aistudio.google.com/api-keys).
+    *   **MODELO**: Elige el modelo (ej: `gemini-flash-latest`). Puedes consultar aquí la lista completa de [modelos y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations).
+    *   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos de Drive.
+    *   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta donde guardas tus documentos de conocimiento.
+    *   **Conocimiento**: El chatbot "sabe" todo lo que el modelo de Gemini seleccionado conoce de forma nativa. Al activar el **modo RAG**, este conocimiento se enriquece con tus propios contenidos. En este sentido, SheetsBot se comporta de forma similar a una **Gema de Gemini** a la que se le han facilitado archivos en su definición, más que a una aplicación de RAG estricto como NotebookLM.
+*   **Ajustes de Aspecto**:
+    *   **CHAT_TITLE**: Personaliza el nombre que aparece en la cabecera del chat.
+    *   **CHAT_SUBTITLE**: Añade una descripción o lema bajo el título.
+    *   **CHAT_ACCENT_COLOR**: Define el color de acento de la interfaz (en formato hexadecimal, ej: `#0c1a78`).
 
 #### 3. Carga de Conocimiento
 *   Si usas el modo RAG, selecciona **🤖 SheetsBot > 🔄 Sincronizar Conocimiento**.
