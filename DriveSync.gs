@@ -269,6 +269,7 @@ function onOpen() {
   const ui = SpreadsheetApp.getUi();
   ui.createMenu('🤖 SheetsBot')
       .addItem('🚀 Inicializar Hoja', 'setupSheet')
+      .addSeparator()
       .addItem('🔄 Sincronizar Conocimiento', 'syncKnowledgeBase')
       .addItem('⚙️ Gestionar Conocimiento', 'showStoreManager')
       .addSeparator()
