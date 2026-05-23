@@ -241,6 +241,8 @@ function uploadFileToGeminiStore(file, storeName, apiKey) {
   }
 }
 
+const VERSION = 'v1.0.0';
+
 /**
  * Añade el menú a la hoja de cálculo al abrir.
  */
@@ -250,5 +252,19 @@ function onOpen() {
       .addItem('🚀 Inicializar Hoja', 'setupSheet')
       .addItem('🔄 Sincronizar Conocimiento', 'syncKnowledgeBase')
       .addItem('⚙️ Gestionar Conocimiento', 'showStoreManager')
+      .addSeparator()
+      .addItem('ℹ️ Acerca de', 'showAbout')
       .addToUi();
+}
+
+/**
+ * Abre el diálogo "Acerca de".
+ */
+function showAbout() {
+  const template = HtmlService.createTemplateFromFile('acercaDe');
+  template.VERSION = VERSION;
+  const html = template.evaluate()
+      .setWidth(450)
+      .setHeight(500);
+  SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }

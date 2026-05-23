@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <!-- Importar Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Importar Iconos de Google -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+      body { 
+        padding: 0; 
+        margin: 0; 
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        background-color: #f5f5f5;
+        overflow-x: hidden;
+      }
+      .header-img-container {
+        background-color: #1a73e8;
+        padding: 30px 10px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        color: white;
+      }
+      .header-emoji {
+        font-size: 60px;
+        margin: 0;
+      }
+      .content-card {
+        margin: -20px 15px 20px 15px;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        position: relative;
+        z-index: 2;
+      }
+      .app-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1a73e8;
+        margin: 0 0 10px 0;
+      }
+      .app-description {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #424242;
+        margin-bottom: 20px;
+      }
+      .version-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #e8f0fe;
+        color: #1967d2;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .footer-info {
+        border-top: 1px solid #f0f0f0;
+        padding-top: 15px;
+        font-size: 13px;
+        color: #757575;
+      }
+      .footer-info a {
+        color: #1a73e8;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .footer-info a:hover {
+        text-decoration: underline;
+      }
+      .links-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 15px;
+      }
+      .link-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .link-item i {
+        font-size: 18px;
+      }
+      .close-container {
+        padding: 0 15px 20px 15px;
+        text-align: center;
+      }
+      .btn-close {
+        width: 100%;
+        text-transform: none;
+        border-radius: 20px;
+        height: 36px;
+        line-height: 36px;
+        background-color: #1a73e8 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header-img-container">
+      <div class="header-emoji">🤖</div>
+    </div>
+
+    <div class="content-card">
+      <div class="app-title">SheetsBot</div>
+      <div class="version-badge"><?=VERSION?></div>
+      
+      <div class="app-description">
+        <b>SheetsBot</b> es un chatbot conversacional avanzado que integra la potencia de <b>Google Gemini</b> directamente en tus hojas de cálculo. 
+        Permite el uso de RAG (Generación Aumentada por Recuperación) mediante <b>File Search</b>, aprendiendo de tus documentos en Drive para ofrecer respuestas precisas y contextualizadas.
+      </div>
+
+      <div class="footer-info">
+        <div>© <a href="https://pablofelip.online/sobre-mi/" target="_blank">Pablo Felip</a> (@pfelipm)</div>
+        <div>Licencia <a href="https://github.com/pfelipm/sheetsbot" target="_blank">MIT</a></div>
+        
+        <div class="links-row">
+          <div class="link-item">
+            <i class="material-icons tiny">code</i>
+            <a href="https://github.com/pfelipm/sheetsbot" target="_blank">Código fuente</a>
+          </div>
+          <div class="link-item">
+            <i class="material-icons tiny">description</i>
+            <a href="https://github.com/pfelipm/sheetsbot/blob/main/README.md" target="_blank">Documentación</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="close-container">
+      <button class="btn waves-effect waves-light btn-close" onclick="google.script.host.close()">
+        Cerrar
+      </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  </body>
+</html>
