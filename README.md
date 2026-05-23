@@ -21,79 +21,74 @@
 
 A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para ser:
 1.  **Privado y Controlado**: Todo ocurre en tu entorno de Google Apps Script. Las llamadas a la API están ocultas en el backend.
-2.  **Experto en tus datos (RAG)**: Gracias a la integración con la capacidad de **File Search** de Gemini, el bot puede "aprender" de los documentos (PDF, Google Docs, hojas de cálculo) que tengas en una carpeta de Google Drive.
-3.  **Seguro**: Permite ajustar los niveles de seguridad de la API para adaptar las respuestas a diferentes tipos de público (incluyendo menores).
+2.  **Experto en tus datos (RAG)**: Gracias a la integración con la capacidad de [**File Search**](https://ai.google.dev/gemini-api/docs/file-search) de Gemini, el bot puede "aprender" de los documentos que tengas en una carpeta de Google Drive.
+3.  **Seguro**: Permite ajustar los niveles de seguridad de la API para adaptar las respuestas a diferentes tipos de público.
 
 ---
 
 ### ✨ Características principales
 
 1.  **Configuración Visual**: Gestiona todo desde la pestaña "Configuración": API Key, modelo, instrucciones de sistema y niveles de seguridad.
-2.  **Motor RAG Avanzado**: Implementa *Generación Aumentada por Recuperación* de forma nativa. El bot no solo responde con su conocimiento general, sino que busca en tus archivos de Drive para dar respuestas precisas.
-3.  **Gestor de Conocimiento**: Un panel moderno (Materialize CSS) para listar, revisar y eliminar los documentos que el bot ha indexado.
-4.  **Sincronización Inteligente**: Proceso de subida interactivo con feedback en tiempo real archivo por archivo y desplazamiento automático.
-5.  **Interfaz Web Moderna**: Una WebApp tipo "Chat" responsive, con soporte para Markdown y diseño limpio.
-6.  **Arquitectura Robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos ante límites de cuota o errores de red.
+2.  **Motor RAG Avanzado**: Implementa *Generación Aumentada por Recuperación* de forma nativa. El bot busca en tus archivos de Drive para dar respuestas precisas. Consulta aquí los [tipos de archivos soportados](https://ai.google.dev/gemini-api/docs/file-search#supported-files).
+3.  **Gestor de Conocimiento**: Un panel moderno para listar, revisar y eliminar los documentos que el bot ha indexado.
+4.  **Sincronización Inteligente**: Proceso de subida interactivo con feedback en tiempo real y desplazamiento automático.
+5.  **Interfaz Web Moderna**: Una WebApp tipo "Chat" responsive, con soporte para Markdown.
+6.  **Arquitectura Robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos.
 
 ---
 
 ### 🚀 Cómo empezar
 
 #### 1. Preparación de la Hoja
-*   Crea una nueva Hoja de Cálculo de Google.
-*   Vincula el código de este repositorio (vía Apps Script o utilizando `clasp`).
-*   Refresca la hoja para que aparezca el menú **🤖 SheetsBot**.
+La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora todo el código necesario:
+👉 **[Duplicar Plantilla de SheetsBot](https://docs.google.com/spreadsheets/d/1o9wLge7oQktrh9rWH0I8bcbnu_o8lXflzNgcu6nR8vw/edit?usp=sharing)**
 
-#### 2. Inicialización
-*   Ve al menú **🤖 SheetsBot > 🚀 Inicializar Hoja**. 
-*   El script creará las pestañas de **Configuración** y **Log**. 
-*   *Nota*: Si la hoja ya está inicializada, el sistema te avisará con un diálogo de seguridad para evitar sobrescribir tus datos.
+*(Si prefieres instalarlo manualmente en una hoja existente, puedes copiar el código de este repositorio y usar el comando **🚀 Inicializar Hoja** del menú).*
 
-#### 3. Configuración del Bot
-*   **API_KEY**: Introduce tu clave de [Google AI Studio](https://aistudio.google.com/).
+#### 2. Configuración del Bot
+*   **API_KEY**: Obtén tu clave en [Google AI Studio](https://aistudio.google.com/api-keys).
 *   **MODELO**: Elige el modelo (ej: `gemini-flash-latest`).
-*   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos.
+*   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos de Drive.
 *   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta donde guardas tus documentos de conocimiento.
 
-#### 4. Carga de Conocimiento
+#### 3. Carga de Conocimiento
 *   Si usas el modo RAG, selecciona **🤖 SheetsBot > 🔄 Sincronizar Conocimiento**.
-*   Podrás elegir entre **Añadir nuevos** archivos o realizar una **Limpieza total** y sincronización desde cero.
-*   Verás en tiempo real cómo se procesa cada documento con spinners e indicadores de éxito.
+*   Podrás elegir entre **Añadir nuevos** archivos o realizar una **Limpieza total**.
+*   Verás en tiempo real cómo se procesa cada documento.
+
+#### 4. Despliegue de la WebApp
+*   En el editor de Apps Script, ve a **Implementar > Nueva implementación**.
+*   Selecciona **Aplicación web**.
+*   Configura: *Ejecutar como: Yo* y *Quién tiene acceso: Cualquiera*.
+*   Copia el URL generado para interactuar con tu bot.
 
 ---
 
 ### ⚙️ Gestión y Auditoría
 
 #### Gestor de Conocimiento
-A través del comando **⚙️ Gestionar Conocimiento**, puedes abrir un panel que te permite:
-*   Ver todos los archivos que Gemini ha indexado con su fecha de subida original.
-*   Seleccionar archivos específicos para eliminarlos del almacén.
+Usa el comando **⚙️ Gestionar Conocimiento** para:
+*   Revisar qué archivos conoce el bot y su fecha de subida.
+*   Eliminar documentos específicos.
 *   Borrar el almacén (Store) completo de forma segura.
 
 #### Pestaña de Log
-Cada mensaje enviado por los usuarios a través de la WebApp queda registrado automáticamente en la pestaña **Log**, incluyendo:
-*   Fecha y hora.
-*   Mensaje del usuario y respuesta del bot.
-*   Consumo de tokens para control de costes y cuota.
+Cada interacción queda registrada automáticamente en la pestaña **Log**, incluyendo el consumo de tokens para control de cuota.
 
 ---
 
 ### 🛠️ Comandos del menú
 
-<img src="assets/banner.png" alt="Menú SheetsBot" align="right" width="250">
-
-*   **🚀 Inicializar Hoja**: Prepara la estructura y validaciones de la hoja de cálculo.
-*   **🔄 Sincronizar Conocimiento**: Sube los archivos de tu carpeta de Drive al motor de búsqueda de Gemini.
-*   **⚙️ Gestionar Conocimiento**: Abre el panel de control de archivos indexados.
+*   **🚀 Inicializar Hoja**: Prepara la estructura y validaciones (opcional si usas la plantilla).
+*   **🔄 Sincronizar Conocimiento**: Sube los archivos de Drive al motor de Gemini.
+*   **⚙️ Gestionar Conocimiento**: Panel de control de archivos indexados.
 *   **ℹ️ Acerca de**: Información de autoría, licencia y versión.
-
-<br clear="right">
 
 ---
 
 ### 🤝 Contribuciones
 
-Si tienes sugerencias para mejorar la interfaz o añadir nuevas capacidades de Gemini, no dudes en abrir un *issue* o enviar un *pull request*.
+Si tienes sugerencias o encuentras errores, por favor abre un *issue* o envía un *pull request*.
 
 ### ✍️ Autoría y agradecimientos
 
