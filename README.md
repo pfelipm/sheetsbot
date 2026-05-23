@@ -89,7 +89,11 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 A través del panel de gestión, puedes revisar el estado de indexación de cada archivo y realizar limpiezas selectivas o totales.
 
 #### Pestaña de Log
-Cada interacción queda registrada automáticamente en la pestaña **Log**, incluyendo el consumo de tokens para control de cuota.
+Cada interacción queda registrada automáticamente en la pestaña **Log**, incluyendo:
+*   **Identificación del Usuario**: 
+    *   Si el despliegue es público, los usuarios se registran como **Usuario anónimo**.
+    *   En entornos **Google Workspace**, si el bot se despliega para el dominio, se capturará el **email del usuario** automáticamente para una trazabilidad completa.
+*   **Consumo de tokens**: Registro detallado para control de cuota y costes.
 <p align="center">
   <img src="assets/hdc-log.png" alt="Registro de Actividad (Log)" width="600">
 </p>
