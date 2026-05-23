@@ -333,7 +333,7 @@
           icon.textContent = 'sync';
           
           // Scroll automático al archivo actual
-          row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
           google.script.run
             .withSuccessHandler((res) => {
