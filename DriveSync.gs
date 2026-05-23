@@ -146,18 +146,25 @@ function getStoreDocuments() {
 }
 
 /**
- * Elimina documentos específicos del store.
+ * Elimina un documento específico del store por su nombre completo.
+ * Llamada desde el modal para feedback granular.
  */
-function deleteSelectedDocuments(docNames) {
-  const config = getConfig();
-  const apiKey = config.API_KEY;
-  
-  docNames.forEach(name => {
-    const url = `https://generativelanguage.googleapis.com/v1beta/${name}?key=${apiKey}&force=true`;
-    fetchWithBackoff(url, { method: 'delete', muteHttpExceptions: true });
-  });
-  
-  return true;
+function deleteDocumentByName(docName) {
+  try {
+    const config = getConfig();
+    const apiKey = config.API_KEY;
+    const url = `https://generativelanguage.googleapis.com/v1beta/${docName}?key=${apiKey}&force=true`;
+    
+    const response = fetchWithBackoff(url, { method: 'delete', muteHttpExceptions: true });
+    
+    if (response.getResponseCode() === 200 || response.getResponseCode() === 404) {
+      return { success: true };
+    } else {
+      return { success: false, error: response.getContentText() };
+    }
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
 }
 
 /**

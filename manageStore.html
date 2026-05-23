@@ -126,6 +126,20 @@
       
       .blue-text-theme { color: #1a73e8 !important; }
       .btn-theme { background-color: #1a73e8 !important; }
+      /* Miniature spinner */
+      .mini-spinner {
+        width: 18px; height: 18px;
+        border: 2px solid #e3f2fd;
+        border-top: 2px solid #1a73e8;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+      .row-working { background-color: #e8f0fe !important; }
+      .row-success { color: #2e7d32; opacity: 0.6; }
+      .row-error { color: #d32f2f; }
     </style>
   </head>
   <body>
@@ -252,17 +266,17 @@
               <tbody>
         `;
 
-        documents.forEach((doc) => {
+        documents.forEach((doc, i) => {
           const date = new Date(doc.createTime).toLocaleString();
           html += `
-            <tr>
-              <td class="center-align">
+            <tr id="doc-row-${i}">
+              <td class="center-align" id="doc-status-${i}">
                 <label>
-                  <input type="checkbox" class="filled-in doc-check" data-name="${doc.name}" />
+                  <input type="checkbox" class="filled-in doc-check" data-name="${doc.name}" data-index="${i}" />
                   <span></span>
                 </label>
               </td>
-              <td style="font-weight: 500;">${doc.displayName || 'Sin nombre'}</td>
+              <td style="font-weight: 500;" class="doc-name-cell">${doc.displayName || 'Sin nombre'}</td>
               <td class="grey-text">${date}</td>
             </tr>
           `;
@@ -281,22 +295,55 @@
         document.querySelectorAll('.doc-check').forEach(cb => cb.checked = !cb.checked);
       }
 
-      function handleDeleteSelected() {
-        const selected = Array.from(document.querySelectorAll('.doc-check:checked')).map(cb => cb.dataset.name);
-        if (selected.length === 0) {
+      async function handleDeleteSelected() {
+        const selectedChecks = Array.from(document.querySelectorAll('.doc-check:checked'));
+        if (selectedChecks.length === 0) {
           customAlert('Por favor, selecciona al menos un archivo para eliminar.');
           return;
         }
 
-        customConfirm(`¿Estás seguro de que deseas eliminar <b>${selected.length}</b> archivo(s)?`, () => {
-          setLoading(true, 'Eliminando archivos...');
-          google.script.run
-            .withSuccessHandler(() => {
-              M.toast({html: 'Archivos eliminados correctamente'});
-              loadDocuments();
-            })
-            .withFailureHandler(showError)
-            .deleteSelectedDocuments(selected);
+        customConfirm(`¿Estás seguro de que deseas eliminar <b>${selectedChecks.length}</b> archivo(s)?`, async () => {
+          // Desactivar controles
+          document.querySelectorAll('.btn, .doc-check').forEach(el => el.disabled = true);
+          document.querySelector('.footer-actions').style.opacity = '0.5';
+          document.querySelector('.controls').style.opacity = '0.5';
+
+          let successCount = 0;
+          let errorCount = 0;
+
+          for (const check of selectedChecks) {
+            const index = check.dataset.index;
+            const name = check.dataset.name;
+            const row = document.getElementById(`doc-row-${index}`);
+            const statusCell = document.getElementById(`doc-status-${index}`);
+
+            // UI: Trabajando
+            row.className = 'row-working';
+            statusCell.innerHTML = '<div class="mini-spinner"></div>';
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            const result = await new Promise((resolve) => {
+              google.script.run
+                .withSuccessHandler(resolve)
+                .withFailureHandler((err) => resolve({ success: false, error: err.message }))
+                .deleteDocumentByName(name);
+            });
+
+            if (result.success) {
+              successCount++;
+              row.className = 'row-success';
+              statusCell.innerHTML = '<i class="material-icons tiny green-text">check_circle</i>';
+            } else {
+              errorCount++;
+              row.className = 'row-error';
+              statusCell.innerHTML = '<i class="material-icons tiny red-text">error</i>';
+            }
+          }
+
+          M.toast({html: `Eliminación finalizada (${successCount} éxitos, ${errorCount} errores)`});
+          
+          // Recargar lista tras una pequeña espera
+          setTimeout(loadDocuments, 1500);
         });
       }
 
