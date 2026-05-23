@@ -104,7 +104,7 @@ Cada interacción queda registrada automáticamente en la pestaña **Log**, incl
 
 Si tienes sugerencias o encuentras errores, por favor abre un *issue* o envía un *pull request*.
 
-### ✍️ Autoría y agradecimientos
+### ✍️ Créditos
 
 *   **Autor:** Pablo Felip ([@pfelipm](https://twitter.com/pfelipm))
 *   **Licencia:** [GNU GPL v3.0](https://github.com/pfelipm/sheetsbot/blob/main/LICENSE)
