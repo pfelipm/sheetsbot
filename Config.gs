@@ -8,9 +8,30 @@ const SHEET_CONFIG_NAME = 'Configuración';
 const SHEET_LOG_NAME = 'Log';
 
 /**
- * Inicializa las pestañas de la hoja de cálculo con los campos necesarios.
+ * Punto de entrada para inicializar las pestañas de la hoja de cálculo.
+ * Detecta si ya está inicializada para pedir confirmación.
  */
 function setupSheet() {
+  const configSheet = SS.getSheetByName(SHEET_CONFIG_NAME);
+  
+  // Si la hoja no existe o está vacía, inicializar directamente
+  if (!configSheet || configSheet.getLastRow() < 2) {
+    executeSetupSheet();
+    SpreadsheetApp.getUi().alert('Estructura inicializada correctamente.');
+  } else {
+    // Si parece inicializada, pedir confirmación con diálogo moderno
+    const html = HtmlService.createHtmlOutputFromFile('initSheet')
+      .setWidth(450)
+      .setHeight(360);
+    SpreadsheetApp.getUi().showModalDialog(html, ' ');
+  }
+}
+
+/**
+ * Lógica real de inicialización. 
+ * Llamada directamente o desde el modal de confirmación.
+ */
+function executeSetupSheet() {
   // Configuración
   let configSheet = SS.getSheetByName(SHEET_CONFIG_NAME);
   if (!configSheet) {
@@ -85,8 +106,6 @@ function setupSheet() {
   const logHeaders = [['Fecha', 'Usuario', 'Mensaje', 'Respuesta', 'Tokens']];
   logSheet.getRange(1, 1, 1, logHeaders[0].length).setValues(logHeaders);
   logSheet.getRange('A1:E1').setFontWeight('bold').setBackground('#f3f3f3');
-  
-  SpreadsheetApp.getUi().alert('Estructura inicializada correctamente.');
 }
 
 /**
