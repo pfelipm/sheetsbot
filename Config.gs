@@ -95,7 +95,7 @@ function executeSetupSheet() {
   configSheet.setColumnWidth(1, 200);
   configSheet.setColumnWidth(2, 400);
   configSheet.setColumnWidth(3, 400);
-  configSheet.getRange('A1:C1').setFontWeight('bold').setBackground('#f3f3f3');
+  configSheet.getRange('A1:C1').setFontWeight('bold').setBackground('#424242').setFontColor('#ffffff');
 
   // Log
   let logSheet = SS.getSheetByName(SHEET_LOG_NAME);
@@ -105,7 +105,7 @@ function executeSetupSheet() {
   logSheet.clear();
   const logHeaders = [['Fecha', 'Usuario', 'Mensaje', 'Respuesta', 'Tokens']];
   logSheet.getRange(1, 1, 1, logHeaders[0].length).setValues(logHeaders);
-  logSheet.getRange('A1:E1').setFontWeight('bold').setBackground('#f3f3f3');
+  logSheet.getRange('A1:E1').setFontWeight('bold').setBackground('#424242').setFontColor('#ffffff');
 }
 
 /**
