@@ -2,6 +2,12 @@
 <html>
   <head>
     <base target="_top">
+    <style>
+      :root {
+        --primary-color: <?= accentColor ?>;
+        --user-msg-bg: <?= accentColor ?>;
+      }
+    </style>
     <?!= include('style'); ?>
     <!-- Marked.js para renderizar Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

@@ -121,6 +121,12 @@ function getConfig() {
   for (let i = 1; i < data.length; i++) {
     config[data[i][0]] = data[i][1];
   }
+  
+  // Normalizar color si es necesario
+  if (config.CHAT_ACCENT_COLOR && !config.CHAT_ACCENT_COLOR.startsWith('#')) {
+    config.CHAT_ACCENT_COLOR = '#' + config.CHAT_ACCENT_COLOR;
+  }
+  
   return config;
 }
 
