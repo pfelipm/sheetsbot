@@ -64,7 +64,7 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
 #### 1. Preparación de la Hoja
 La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora todo el código necesario:
 
-> 👉 **[Plantilla de SheetsBot](https://docs.google.com/spreadsheets/d/1o9wLge7oQktrh9rWH0I8bcbnu_o8lXflzNgcu6nR8vw/edit?usp=sharing)**
+> 👉 **[Plantilla de SheetsBot](https://docs.google.com/spreadsheets/d/1LMaOotpm1fHamoVXGhtQkSRy1_HMEDtNSXfAIrN9IRY/edit?usp=sharing)**
 
 #### 2. Configuración del Bot
 *   **Ajustes de Inteligencia**:
