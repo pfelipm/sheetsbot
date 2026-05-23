@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <!-- Importar Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Importar Iconos de Google -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+      body { 
+        font-family: 'Segoe UI', sans-serif; 
+        padding: 0; 
+        margin: 0; 
+        color: #333; 
+        background-color: #f5f5f5;
+        overflow: hidden;
+      }
+      .header-container {
+        background-color: #1a73e8;
+        padding: 15px;
+        color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .header-container i { font-size: 24px; }
+      .header-container span { font-size: 18px; font-weight: 500; }
+      
+      .content-area {
+        padding: 30px 20px;
+        text-align: center;
+      }
+
+      .progress-container {
+        margin: 25px 0;
+      }
+
+      .status-text {
+        font-size: 16px;
+        margin-bottom: 10px;
+        font-weight: 500;
+      }
+
+      .file-name {
+        font-size: 14px;
+        color: #5f6368;
+        font-style: italic;
+        margin-bottom: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+      }
+
+      .results-area {
+        display: none;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      }
+
+      .btn-theme { background-color: #1a73e8 !important; }
+    </style>
+  </head>
+  <body>
+    <div class="header-container">
+      <i class="material-icons">sync</i>
+      <span>Sincronizando Conocimiento</span>
+    </div>
+    
+    <div class="content-area">
+      <div id="sync-ui">
+        <div class="status-text" id="status">Preparando archivos...</div>
+        <span class="file-name" id="current-file">Iniciando proceso...</span>
+        
+        <div class="progress-container">
+          <div class="progress blue lighten-4">
+            <div class="indeterminate blue accent-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="results-ui" class="results-area">
+        <i class="material-icons green-text" style="font-size: 48px;">check_circle</i>
+        <h5 id="result-title">¡Sincronización completa!</h5>
+        <p id="result-detail" style="margin: 15px 0; font-size: 14px;"></p>
+        <button class="btn btn-theme waves-effect waves-light" onclick="google.script.host.close()">Cerrar</button>
+      </div>
+    </div>
+
+    <script>
+      let fileList = [];
+      let currentIndex = 0;
+      let successCount = 0;
+      let errorCount = 0;
+
+      window.onload = startSync;
+
+      function startSync() {
+        google.script.run
+          .withSuccessHandler(processFiles)
+          .withFailureHandler(handleCriticalError)
+          .getFilesToSync();
+      }
+
+      function processFiles(files) {
+        fileList = files;
+        if (fileList.length === 0) {
+          showFinalResults('No se encontraron archivos compatibles en la carpeta de Drive.');
+          return;
+        }
+        syncNextFile();
+      }
+
+      function syncNextFile() {
+        if (currentIndex < fileList.length) {
+          const file = fileList[currentIndex];
+          document.getElementById('status').textContent = `Sincronizando ${currentIndex + 1} de ${fileList.length}`;
+          document.getElementById('current-file').textContent = file.name;
+
+          google.script.run
+            .withSuccessHandler((res) => {
+              if (res.success) successCount++;
+              else errorCount++;
+              currentIndex++;
+              syncNextFile();
+            })
+            .withFailureHandler((err) => {
+              errorCount++;
+              currentIndex++;
+              syncNextFile();
+            })
+            .uploadFileById(file.id);
+        } else {
+          showFinalResults();
+        }
+      }
+
+      function showFinalResults(customMsg) {
+        document.getElementById('sync-ui').style.display = 'none';
+        const results = document.getElementById('results-ui');
+        results.style.display = 'block';
+        
+        const detail = customMsg || `Se han procesado ${fileList.length} archivos.<br>✅ Éxito: ${successCount}<br>❌ Errores: ${errorCount}`;
+        document.getElementById('result-detail').innerHTML = detail;
+        
+        if (errorCount > 0) {
+          document.getElementById('result-title').textContent = 'Sincronización finalizada';
+          document.querySelector('#results-ui i').textContent = 'info';
+          document.querySelector('#results-ui i').className = 'material-icons orange-text';
+        }
+      }
+
+      function handleCriticalError(err) {
+        document.getElementById('sync-ui').style.display = 'none';
+        const results = document.getElementById('results-ui');
+        results.style.display = 'block';
+        document.getElementById('result-title').textContent = 'Error crítico';
+        document.querySelector('#results-ui i').textContent = 'error';
+        document.querySelector('#results-ui i').className = 'material-icons red-text';
+        document.getElementById('result-detail').textContent = err.message;
+      }
+    </script>
+  </body>
+</html>

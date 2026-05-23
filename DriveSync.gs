@@ -5,7 +5,7 @@
 
 /**
  * Función principal para sincronizar la carpeta de Drive con el Store de Gemini.
- * Se puede llamar desde un botón en la Sheet.
+ * Inicia el proceso y abre el diálogo de progreso.
  */
 function syncKnowledgeBase() {
   const ui = SpreadsheetApp.getUi();
@@ -19,70 +19,81 @@ function syncKnowledgeBase() {
   let storeName = config.ID_STORE_GEMINI;
 
   // Si ya existe un store, preguntar modo
-  let mode = 'ADD'; // Por defecto añadir
   if (storeName) {
     const response = ui.alert(
       '🔄 Modo de Sincronización',
-      '¿Deseas realizar una sincronización LIMPIA (borrar todo lo anterior y subir solo lo que hay ahora en la carpeta) o simplemente AÑADIR los archivos nuevos?\n\nPulsa SÍ para Limpiar y Sincronizar.\nPulsa NO para solo Añadir.',
+      '¿Deseas realizar una sincronización LIMPIA (borrar todo lo anterior) o simplemente AÑADIR los archivos nuevos?\n\nPulsa SÍ para Limpiar.\nPulsa NO para Añadir.',
       ui.ButtonSet.YES_NO_CANCEL
     );
 
     if (response === ui.Button.CANCEL) return;
     if (response === ui.Button.YES) {
-      mode = 'CLEAN';
-      // Borrar el store actual antes de seguir (forzando si no está vacío)
+      // Borrar el store actual forzando
       const deleteUrl = `https://generativelanguage.googleapis.com/v1beta/${storeName}?key=${apiKey}&force=true`;
       UrlFetchApp.fetch(deleteUrl, { method: 'delete', muteHttpExceptions: true });
-      storeName = ''; // Forzar creación de uno nuevo
+      setConfigValue('ID_STORE_GEMINI', '');
     }
   }
 
-  // 1. Crear el Store si no existe (o si acabamos de borrarlo)
-  if (!storeName) {
-    storeName = createFileSearchStore(apiKey);
-    setConfigValue('ID_STORE_GEMINI', storeName);
-  }
+  // Abrir el diálogo de progreso
+  const html = HtmlService.createHtmlOutputFromFile('syncProgress')
+    .setWidth(450)
+    .setHeight(320);
+  ui.showModalDialog(html, ' ');
+}
 
-  // 2. Obtener archivos de la carpeta de Drive
+/**
+ * Obtiene la lista de archivos a sincronizar. Llamada desde el modal.
+ */
+function getFilesToSync() {
+  const config = getConfig();
+  const folderId = config.ID_CARPETA_DRIVE;
   const folder = DriveApp.getFolderById(folderId);
   const files = folder.getFiles();
-  let uploadCount = 0;
-  let errors = [];
+  const fileList = [];
+  
+  const supportedTypes = [
+    'application/pdf',
+    'application/vnd.google-apps.document',
+    'text/plain',
+    'application/vnd.google-apps.spreadsheet',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  ];
 
   while (files.hasNext()) {
     const file = files.next();
     const mimeType = file.getMimeType();
-    
-    // Filtrar tipos de archivo soportados
-    const supportedTypes = [
-      'application/pdf',
-      'application/vnd.google-apps.document',
-      'text/plain',
-      'application/vnd.google-apps.spreadsheet',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ];
-
     if (supportedTypes.indexOf(mimeType) !== -1 || mimeType.startsWith('image/') || mimeType.startsWith('text/')) {
-      try {
-        uploadFileToGeminiStore(file, storeName, apiKey);
-        uploadCount++;
-      } catch (e) {
-        errors.push(`Error en "${file.getName()}": ${e.message}`);
-      }
+      fileList.push({ id: file.getId(), name: file.getName() });
     }
   }
-
-  let message = `Sincronización finalizada (${mode === 'CLEAN' ? 'Limpia' : 'Añadir'}).\n\n✅ Archivos subidos con éxito: ${uploadCount}`;
-  if (errors.length > 0) {
-    message += `\n\n❌ Errores (${errors.length}):\n- ` + errors.slice(0, 5).join('\n- ');
-  }
   
-  if (uploadCount === 0 && errors.length === 0) {
-    message += '\n\nNo se encontraron archivos compatibles en la carpeta. Asegúrate de que contenga PDFs, Google Docs, hojas de cálculo o archivos de texto.';
-  }
+  return fileList;
+}
 
-  ui.alert(message);
+/**
+ * Sube un archivo individual por su ID. Llamada desde el modal.
+ */
+function uploadFileById(fileId) {
+  try {
+    const config = getConfig();
+    const apiKey = config.API_KEY;
+    let storeName = config.ID_STORE_GEMINI;
+
+    // Crear store si no existe
+    if (!storeName) {
+      storeName = createFileSearchStore(apiKey);
+      setConfigValue('ID_STORE_GEMINI', storeName);
+    }
+
+    const file = DriveApp.getFileById(fileId);
+    uploadFileToGeminiStore(file, storeName, apiKey);
+    return { success: true };
+  } catch (e) {
+    console.error('Error subiendo archivo ' + fileId + ': ' + e.message);
+    return { success: false, error: e.message };
+  }
 }
 
 /**
