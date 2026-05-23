@@ -73,7 +73,20 @@
         text-transform: uppercase;
       }
       
-      td { font-size: 14px; padding: 12px 10px; }
+      td { 
+        font-size: 14px; 
+        padding: 12px 10px; 
+        vertical-align: middle !important; 
+      }
+      
+      /* Fix for checkbox alignment in Materialize */
+      td label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 20px;
+        margin-top: 2px;
+      }
       
       .footer-actions { 
         display: flex; 
