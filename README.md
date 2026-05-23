@@ -66,7 +66,7 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 
 #### 2. Configuración del Bot
 *   **API_KEY**: Obtén tu clave en [Google AI Studio](https://aistudio.google.com/api-keys).
-*   **MODELO**: Elige el modelo (ej: `gemini-flash-latest`).
+*   **MODELO**: Elige el modelo (ej: `gemini-flash-latest`). Puedes consultar aquí la lista completa de [modelos disponibles y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations).
 *   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos de Drive.
 *   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta donde guardas tus documentos de conocimiento.
 
