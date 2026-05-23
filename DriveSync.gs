@@ -265,6 +265,6 @@ function showAbout() {
   template.VERSION = VERSION;
   const html = template.evaluate()
       .setWidth(540)
-      .setHeight(580);
+      .setHeight(640);
   SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }
