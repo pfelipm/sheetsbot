@@ -5,6 +5,7 @@
 
 /**
  * Función principal para sincronizar la carpeta de Drive con el Store de Gemini.
+ * Se puede llamar desde un botón en la Sheet.
  */
 function syncKnowledgeBase() {
   const ui = SpreadsheetApp.getUi();
@@ -241,7 +242,7 @@ function uploadFileToGeminiStore(file, storeName, apiKey) {
   }
 }
 
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.0 (mayo 2026)';
 
 /**
  * Añade el menú a la hoja de cálculo al abrir.
@@ -265,6 +266,6 @@ function showAbout() {
   template.VERSION = VERSION;
   const html = template.evaluate()
       .setWidth(540)
-      .setHeight(640);
+      .setHeight(680);
   SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }
