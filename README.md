@@ -30,7 +30,7 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
 
 1.  **Configuración Visual**: Gestiona todo desde la pestaña "Configuración": API Key, modelo, instrucciones de sistema y niveles de seguridad.
     <p align="center">
-      <img src="assets/hdc-configutración.png" alt="Panel de Configuración de SheetsBot" width="600">
+      <img src="assets/hdc-configuración.png" alt="Panel de Configuración de SheetsBot" width="600">
     </p>
 
 2.  **Motor RAG Avanzado**: Implementa *Generación Aumentada por Recuperación* de forma nativa. El bot busca en tus archivos de Drive para dar respuestas precisas. Consulta aquí los [tipos de archivos soportados](https://ai.google.dev/gemini-api/docs/file-search#supported-files).
@@ -86,7 +86,7 @@ A través del panel de gestión, puedes revisar el estado de indexación de cada
 #### Pestaña de Log
 Cada interacción queda registrada automáticamente en la pestaña **Log**, incluyendo el consumo de tokens para control de cuota.
 <p align="center">
-  <img src="assets/hdc.-log.png" alt="Registro de Actividad (Log)" width="600">
+  <img src="assets/hdc-log.png" alt="Registro de Actividad (Log)" width="600">
 </p>
 
 ---
