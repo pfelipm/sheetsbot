@@ -27,42 +27,76 @@
       .header-container i { font-size: 24px; }
       .header-container span { font-size: 18px; font-weight: 500; }
       
-      .content-area {
-        padding: 30px 20px;
+      #main-wrapper {
+        padding: 20px;
+        height: calc(100vh - 54px);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        margin-bottom: 15px;
+      }
+
+      .scroll-area {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+      }
+
+      .file-item {
+        padding: 6px 0;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #5f6368;
+      }
+
+      .mode-selection {
+        padding: 20px;
         text-align: center;
       }
 
-      .progress-container {
-        margin: 25px 0;
-      }
-
-      .status-text {
-        font-size: 16px;
-        margin-bottom: 10px;
-        font-weight: 500;
-      }
-
-      .file-name {
-        font-size: 14px;
-        color: #5f6368;
-        font-style: italic;
-        margin-bottom: 20px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
+      .sync-active {
+        padding: 30px 20px;
+        text-align: center;
+        display: none;
       }
 
       .results-area {
         display: none;
         padding: 20px;
-        background: white;
-        border-radius: 8px;
-        margin-top: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        text-align: center;
       }
 
       .btn-theme { background-color: #1a73e8 !important; }
+      .btn-outline { 
+        background-color: transparent !important; 
+        color: #1a73e8 !important; 
+        border: 1px solid #1a73e8 !important;
+        box-shadow: none !important;
+      }
+      
+      .status-text { font-weight: 500; margin-bottom: 10px; display: block; }
+      .current-file { font-size: 12px; color: #888; font-style: italic; }
+
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #5f6368;
+      }
     </style>
   </head>
   <body>
@@ -71,23 +105,51 @@
       <span>Sincronizando Conocimiento</span>
     </div>
     
-    <div class="content-area">
-      <div id="sync-ui">
-        <div class="status-text" id="status">Preparando archivos...</div>
-        <span class="file-name" id="current-file">Iniciando proceso...</span>
-        
-        <div class="progress-container">
-          <div class="progress blue lighten-4">
+    <div id="main-wrapper">
+      <div class="content-card">
+        <!-- Estado 1: Cargando lista -->
+        <div id="loading-files" class="loading-container">
+          <div class="preloader-wrapper small active">
+            <div class="spinner-layer spinner-blue-only">
+              <div class="circle-clipper left"><div class="circle"></div></div>
+              <div class="gap-patch"><div class="circle"></div></div>
+              <div class="circle-clipper right"><div class="circle"></div></div>
+            </div>
+          </div>
+          <p style="margin-top: 15px;">Escaneando carpeta...</p>
+        </div>
+
+        <!-- Estado 2: Previsualización y Selección de Modo -->
+        <div id="preview-ui" style="display: none; height: 100%; flex-direction: column;">
+          <div class="scroll-area" id="file-list-container">
+            <p style="font-weight: 500; font-size: 14px; margin-top: 0;">Archivos encontrados:</p>
+            <div id="file-list"></div>
+          </div>
+          <div class="mode-selection">
+            <p style="font-size: 13px; margin-bottom: 15px; color: #666;">¿Cómo quieres sincronizar estos archivos?</p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+              <button class="btn btn-outline waves-effect" onclick="startSyncProcess('ADD')">Añadir nuevos</button>
+              <button class="btn btn-theme waves-effect waves-light" onclick="confirmCleanSync()">Limpiar y Sincronizar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estado 3: Sincronización activa -->
+        <div id="sync-ui" class="sync-active">
+          <span class="status-text" id="status-title">Iniciando...</span>
+          <span class="current-file" id="current-file-name">...</span>
+          <div class="progress blue lighten-4" style="margin: 25px 0;">
             <div class="indeterminate blue accent-2"></div>
           </div>
         </div>
-      </div>
 
-      <div id="results-ui" class="results-area">
-        <i class="material-icons green-text" style="font-size: 48px;">check_circle</i>
-        <h5 id="result-title">¡Sincronización completa!</h5>
-        <p id="result-detail" style="margin: 15px 0; font-size: 14px;"></p>
-        <button class="btn btn-theme waves-effect waves-light" onclick="google.script.host.close()">Cerrar</button>
+        <!-- Estado 4: Resultados -->
+        <div id="results-ui" class="results-area">
+          <i class="material-icons green-text" id="result-icon" style="font-size: 48px;">check_circle</i>
+          <h5 id="result-title">¡Completado!</h5>
+          <p id="result-detail" style="margin: 15px 0; font-size: 14px;"></p>
+          <button class="btn btn-theme waves-effect waves-light" onclick="google.script.host.close()">Cerrar</button>
+        </div>
       </div>
     </div>
 
@@ -97,29 +159,57 @@
       let successCount = 0;
       let errorCount = 0;
 
-      window.onload = startSync;
-
-      function startSync() {
+      window.onload = () => {
         google.script.run
-          .withSuccessHandler(processFiles)
+          .withSuccessHandler(showPreview)
           .withFailureHandler(handleCriticalError)
           .getFilesToSync();
-      }
+      };
 
-      function processFiles(files) {
+      function showPreview(files) {
         fileList = files;
-        if (fileList.length === 0) {
-          showFinalResults('No se encontraron archivos compatibles en la carpeta de Drive.');
+        document.getElementById('loading-files').style.display = 'none';
+        
+        const preview = document.getElementById('preview-ui');
+        preview.style.display = 'flex';
+
+        if (files.length === 0) {
+          document.getElementById('file-list').innerHTML = '<p class="grey-text">No hay archivos compatibles en la carpeta.</p>';
+          document.querySelectorAll('.mode-selection button').forEach(b => b.disabled = true);
           return;
         }
-        syncNextFile();
+
+        let html = '';
+        files.forEach(f => {
+          html += `<div class="file-item"><i class="material-icons tiny">insert_drive_file</i>${f.name}</div>`;
+        });
+        document.getElementById('file-list').innerHTML = html;
+      }
+
+      function confirmCleanSync() {
+        if (confirm('⚠️ Esto borrará todo el conocimiento previo en Gemini y subirá solo estos archivos. ¿Continuar?')) {
+          startSyncProcess('CLEAN');
+        }
+      }
+
+      function startSyncProcess(mode) {
+        document.getElementById('preview-ui').style.display = 'none';
+        document.getElementById('sync-ui').style.display = 'block';
+        document.getElementById('status-title').textContent = 'Preparando almacén...';
+
+        google.script.run
+          .withSuccessHandler(() => {
+            syncNextFile();
+          })
+          .withFailureHandler(handleCriticalError)
+          .prepareStore(mode);
       }
 
       function syncNextFile() {
         if (currentIndex < fileList.length) {
           const file = fileList[currentIndex];
-          document.getElementById('status').textContent = `Sincronizando ${currentIndex + 1} de ${fileList.length}`;
-          document.getElementById('current-file').textContent = file.name;
+          document.getElementById('status-title').textContent = `Subiendo ${currentIndex + 1} de ${fileList.length}`;
+          document.getElementById('current-file-name').textContent = file.name;
 
           google.script.run
             .withSuccessHandler((res) => {
@@ -128,7 +218,7 @@
               currentIndex++;
               syncNextFile();
             })
-            .withFailureHandler((err) => {
+            .withFailureHandler(() => {
               errorCount++;
               currentIndex++;
               syncNextFile();
@@ -139,28 +229,29 @@
         }
       }
 
-      function showFinalResults(customMsg) {
+      function showFinalResults() {
         document.getElementById('sync-ui').style.display = 'none';
-        const results = document.getElementById('results-ui');
-        results.style.display = 'block';
+        document.getElementById('results-ui').style.display = 'block';
         
-        const detail = customMsg || `Se han procesado ${fileList.length} archivos.<br>✅ Éxito: ${successCount}<br>❌ Errores: ${errorCount}`;
+        const detail = `Procesados: ${fileList.length}<br>✅ Éxito: ${successCount}<br>❌ Errores: ${errorCount}`;
         document.getElementById('result-detail').innerHTML = detail;
         
         if (errorCount > 0) {
-          document.getElementById('result-title').textContent = 'Sincronización finalizada';
-          document.querySelector('#results-ui i').textContent = 'info';
-          document.querySelector('#results-ui i').className = 'material-icons orange-text';
+          document.getElementById('result-title').textContent = 'Finalizado con avisos';
+          document.getElementById('result-icon').textContent = 'info';
+          document.getElementById('result-icon').className = 'material-icons orange-text';
         }
       }
 
       function handleCriticalError(err) {
+        document.getElementById('loading-files').style.display = 'none';
+        document.getElementById('preview-ui').style.display = 'none';
         document.getElementById('sync-ui').style.display = 'none';
         const results = document.getElementById('results-ui');
         results.style.display = 'block';
-        document.getElementById('result-title').textContent = 'Error crítico';
-        document.querySelector('#results-ui i').textContent = 'error';
-        document.querySelector('#results-ui i').className = 'material-icons red-text';
+        document.getElementById('result-title').textContent = 'Error';
+        document.getElementById('result-icon').textContent = 'error';
+        document.getElementById('result-icon').className = 'material-icons red-text';
         document.getElementById('result-detail').textContent = err.message;
       }
     </script>

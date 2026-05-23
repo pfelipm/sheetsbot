@@ -5,7 +5,7 @@
 
 /**
  * Función principal para sincronizar la carpeta de Drive con el Store de Gemini.
- * Inicia el proceso y abre el diálogo de progreso.
+ * Abre el diálogo de configuración y progreso.
  */
 function syncKnowledgeBase() {
   const ui = SpreadsheetApp.getUi();
@@ -16,30 +16,37 @@ function syncKnowledgeBase() {
   if (!apiKey) throw new Error('Configura la API_KEY primero.');
   if (!folderId) throw new Error('Configura el ID_CARPETA_DRIVE primero.');
 
+  // Abrir el diálogo de progreso con más altura
+  const html = HtmlService.createHtmlOutputFromFile('syncProgress')
+    .setWidth(500)
+    .setHeight(520);
+  ui.showModalDialog(html, ' ');
+}
+
+/**
+ * Prepara el store según el modo elegido (limpio o añadir).
+ * Llamada desde el modal antes de empezar a subir.
+ */
+function prepareStore(mode) {
+  const config = getConfig();
+  const apiKey = config.API_KEY;
   let storeName = config.ID_STORE_GEMINI;
 
-  // Si ya existe un store, preguntar modo
-  if (storeName) {
-    const response = ui.alert(
-      '🔄 Modo de Sincronización',
-      '¿Deseas realizar una sincronización LIMPIA (borrar todo lo anterior) o simplemente AÑADIR los archivos nuevos?\n\nPulsa SÍ para Limpiar.\nPulsa NO para Añadir.',
-      ui.ButtonSet.YES_NO_CANCEL
-    );
-
-    if (response === ui.Button.CANCEL) return;
-    if (response === ui.Button.YES) {
-      // Borrar el store actual forzando
-      const deleteUrl = `https://generativelanguage.googleapis.com/v1beta/${storeName}?key=${apiKey}&force=true`;
-      UrlFetchApp.fetch(deleteUrl, { method: 'delete', muteHttpExceptions: true });
-      setConfigValue('ID_STORE_GEMINI', '');
-    }
+  if (mode === 'CLEAN' && storeName) {
+    // Borrar el store actual forzando
+    const deleteUrl = `https://generativelanguage.googleapis.com/v1beta/${storeName}?key=${apiKey}&force=true`;
+    UrlFetchApp.fetch(deleteUrl, { method: 'delete', muteHttpExceptions: true });
+    setConfigValue('ID_STORE_GEMINI', '');
+    storeName = '';
   }
 
-  // Abrir el diálogo de progreso
-  const html = HtmlService.createHtmlOutputFromFile('syncProgress')
-    .setWidth(450)
-    .setHeight(320);
-  ui.showModalDialog(html, ' ');
+  // Crear store si no existe (o si lo acabamos de borrar)
+  if (!storeName) {
+    storeName = createFileSearchStore(apiKey);
+    setConfigValue('ID_STORE_GEMINI', storeName);
+  }
+  
+  return { success: true, storeName: storeName };
 }
 
 /**
