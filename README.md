@@ -24,6 +24,10 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
 2.  **Experto en tus datos (RAG)**: Gracias a la integración con la capacidad de [**File Search**](https://ai.google.dev/gemini-api/docs/file-search) de Gemini, el bot puede "aprender" de los documentos que tengas en una carpeta de Google Drive.
 3.  **Seguro**: Permite ajustar los niveles de seguridad de la API para adaptar las respuestas a diferentes tipos de público.
 
+<p align="center">
+  <img src="assets/infografía.png" alt="Infografía de SheetsBot" width="800">
+</p>
+
 ---
 
 ### ✨ Características principales
