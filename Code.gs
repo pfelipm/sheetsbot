@@ -7,9 +7,16 @@
  * Sirve la página principal de la WebApp.
  */
 function doGet() {
+  const config = getConfig();
   const template = HtmlService.createTemplateFromFile('index');
+  
+  // Pasar personalización al template
+  template.chatTitle = config.CHAT_TITLE || '🤖 SheetsBot';
+  template.chatSubtitle = config.CHAT_SUBTITLE || 'Asistente impulsado por Gemini';
+  template.accentColor = config.CHAT_ACCENT_COLOR || '#4a90e2';
+  
   return template.evaluate()
-      .setTitle('SheetsBot - Asistente Gemini')
+      .setTitle(template.chatTitle)
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
       .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }

@@ -50,7 +50,10 @@ function executeSetupSheet() {
     ['ID_CARPETA_DRIVE', '', 'ID de la carpeta de Drive con el conocimiento'],
     ['ID_STORE_GEMINI', '', 'ID del File Search Store (se genera automáticamente)'],
     ['INSTRUCCION_SISTEMA', 'Eres un asistente útil y amable llamado SheetsBot.', 'Instrucciones base para el comportamiento del bot'],
-    ['THINKING_LEVEL', 'medium', 'Nivel de razonamiento (thinking) del modelo (low, medium, high)']
+    ['THINKING_LEVEL', 'medium', 'Nivel de razonamiento (thinking) del modelo (low, medium, high)'],
+    ['CHAT_TITLE', '🤖 SheetsBot', 'Título de la ventana del chatbot'],
+    ['CHAT_SUBTITLE', 'Asistente impulsado por Gemini', 'Subtítulo de la ventana del chatbot'],
+    ['CHAT_ACCENT_COLOR', '#4a90e2', 'Color de acento (primary-color CSS) de la ventana del chatbot']
   ];
   configSheet.getRange(1, 1, configData.length, 3).setValues(configData);
   
