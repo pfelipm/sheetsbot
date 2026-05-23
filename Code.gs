@@ -23,8 +23,11 @@ function processMessage(userMessage, chatHistory) {
   try {
     const response = callGemini(userMessage, chatHistory);
     
+    // Obtener el email del usuario o poner "Usuario anónimo" si no está disponible
+    const userEmail = Session.getActiveUser().getEmail() || 'Usuario anónimo';
+    
     // Registrar en el Log de la Sheet
-    logInteraction('Usuario WebApp', userMessage, response.text, response.tokens);
+    logInteraction(userEmail, userMessage, response.text, response.tokens);
     
     return {
       success: true,
