@@ -189,6 +189,10 @@
 
         <!-- Estado 2 y 3: Previsualización y Sincronización -->
         <div id="sync-ui" style="display: none; height: 100%; flex-direction: column;">
+          <div id="global-status" style="display: none; padding: 10px 15px; background: #e8f0fe; color: #1a73e8; font-size: 13px; font-weight: 500; align-items: center; gap: 10px;">
+            <div class="mini-spinner" style="width: 14px; height: 14px; border-width: 1px;"></div>
+            <span id="global-status-text">Preparando almacén de Gemini...</span>
+          </div>
           <div class="scroll-area" id="file-list-container">
             <div id="file-list"></div>
           </div>
@@ -312,8 +316,13 @@
         isSyncing = true;
         document.getElementById('mode-selection-ui').style.display = 'none';
         
+        // Mostrar mensaje de preparación
+        const globalStatus = document.getElementById('global-status');
+        globalStatus.style.display = 'flex';
+        
         google.script.run
           .withSuccessHandler(() => {
+            document.getElementById('global-status-text').textContent = 'Sincronizando archivos...';
             syncNextFile();
           })
           .withFailureHandler(handleCriticalError)
@@ -360,6 +369,7 @@
             })
             .uploadFileById(file.id);
         } else {
+          document.getElementById('global-status').style.display = 'none';
           showFinalResults();
         }
       }
