@@ -29,10 +29,24 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
 ### ✨ Características principales
 
 1.  **Configuración Visual**: Gestiona todo desde la pestaña "Configuración": API Key, modelo, instrucciones de sistema y niveles de seguridad.
+    <p align="center">
+      <img src="assets/hdc-configutración.png" alt="Panel de Configuración de SheetsBot" width="600">
+    </p>
+
 2.  **Motor RAG Avanzado**: Implementa *Generación Aumentada por Recuperación* de forma nativa. El bot busca en tus archivos de Drive para dar respuestas precisas. Consulta aquí los [tipos de archivos soportados](https://ai.google.dev/gemini-api/docs/file-search#supported-files).
+
 3.  **Gestor de Conocimiento**: Un panel moderno para listar, revisar y eliminar los documentos que el bot ha indexado.
+    <p align="center">
+      <img src="assets/diálogo-gestionar.png" alt="Gestor de Conocimiento" width="500">
+    </p>
+
 4.  **Sincronización Inteligente**: Proceso de subida interactivo con feedback en tiempo real y desplazamiento automático.
+    <p align="center">
+      <img src="assets/diálogo-sincronizar.png" alt="Proceso de Sincronización" width="500">
+    </p>
+
 5.  **Interfaz Web Moderna**: Una WebApp tipo "Chat" responsive, con soporte para Markdown.
+
 6.  **Arquitectura Robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos.
 
 ---
@@ -67,17 +81,21 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 ### ⚙️ Gestión y Auditoría
 
 #### Gestor de Conocimiento
-Usa el comando **⚙️ Gestionar Conocimiento** para:
-*   Revisar qué archivos conoce el bot y su fecha de subida.
-*   Eliminar documentos específicos.
-*   Borrar el almacén (Store) completo de forma segura.
+A través del panel de gestión, puedes revisar el estado de indexación de cada archivo y realizar limpiezas selectivas o totales.
 
 #### Pestaña de Log
 Cada interacción queda registrada automáticamente en la pestaña **Log**, incluyendo el consumo de tokens para control de cuota.
+<p align="center">
+  <img src="assets/hdc.-log.png" alt="Registro de Actividad (Log)" width="600">
+</p>
 
 ---
 
 ### 🛠️ Comandos del menú
+
+<p align="center">
+  <img src="assets/acercade.png" alt="Diálogo Acerca de" width="500">
+</p>
 
 *   **🚀 Inicializar Hoja**: Prepara la estructura y validaciones (opcional si usas la plantilla).
 *   **🔄 Sincronizar Conocimiento**: Sube los archivos de Drive al motor de Gemini.
