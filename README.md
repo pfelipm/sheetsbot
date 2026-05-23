@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="SheetsBot Banner">
+  <img src="assets/banner-1000.png" alt="SheetsBot Banner">
 </p>
 
 <p align="center">
