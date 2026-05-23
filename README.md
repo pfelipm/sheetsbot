@@ -51,6 +51,9 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
     </p>
 
 5.  **Interfaz Web Moderna**: Una WebApp tipo "Chat" responsive, con soporte para Markdown.
+    <p align="center">
+      <img src="assets/chatbot.png" alt="Interfaz de Chat de SheetsBot" width="400">
+    </p>
 
 6.  **Arquitectura Robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos.
 
