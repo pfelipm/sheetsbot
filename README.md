@@ -60,13 +60,14 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
 
 #### 1. Preparación de la Hoja
 La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora todo el código necesario:
-👉 **[Duplicar Plantilla de SheetsBot](https://docs.google.com/spreadsheets/d/1o9wLge7oQktrh9rWH0I8bcbnu_o8lXflzNgcu6nR8vw/edit?usp=sharing)**
+
+> 👉 **[Duplicar Plantilla de SheetsBot](https://docs.google.com/spreadsheets/d/1o9wLge7oQktrh9rWH0I8bcbnu_o8lXflzNgcu6nR8vw/edit?usp=sharing)**
 
 *(Si prefieres instalarlo manualmente en una hoja existente, puedes copiar el código de este repositorio y usar el comando **🚀 Inicializar Hoja** del menú).*
 
 #### 2. Configuración del Bot
 *   **API_KEY**: Obtén tu clave en [Google AI Studio](https://aistudio.google.com/api-keys).
-*   **MODELO**: Elige el modelo (ej: `gemini-flash-latest`). Puedes consultar aquí la lista completa de [modelos disponibles y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations).
+*   **MODELO**: Elige el modelo (ej: `gemini-flash-latest`). Puedes consultar aquí la lista completa de [modelos y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations).
 *   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos de Drive.
 *   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta donde guardas tus documentos de conocimiento.
 
@@ -76,10 +77,9 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 *   Verás en tiempo real cómo se procesa cada documento.
 
 #### 4. Despliegue de la WebApp
-*   En el editor de Apps Script, ve a **Implementar > Nueva implementación**.
-*   Selecciona **Aplicación web**.
-*   Configura: *Ejecutar como: Yo* y *Quién tiene acceso: Cualquiera*.
-*   Copia el URL generado para interactuar con tu bot.
+En el editor de Apps Script, ve a **Implementar > Nueva implementación**, selecciona **Aplicación web** y elige el tipo de acceso:
+*   **Cualquiera (Uso anónimo)**: Ideal para bots públicos. No requiere que el usuario inicie sesión.
+*   **Cualquier persona con una cuenta de Google (o usuarios de tu dominio)**: El uso del chatbot requiere inicio de sesión y permite capturar la identidad (email) del usuario en cada interacción para su registro en el Log.
 
 ---
 
