@@ -93,10 +93,6 @@ Cada interacción queda registrada automáticamente en la pestaña **Log**, incl
 
 ### 🛠️ Comandos del menú
 
-<p align="center">
-  <img src="assets/acercade.png" alt="Diálogo Acerca de" width="500">
-</p>
-
 *   **🚀 Inicializar Hoja**: Prepara la estructura y validaciones (opcional si usas la plantilla).
 *   **🔄 Sincronizar Conocimiento**: Sube los archivos de Drive al motor de Gemini.
 *   **⚙️ Gestionar Conocimiento**: Panel de control de archivos indexados.
