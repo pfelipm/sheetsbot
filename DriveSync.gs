@@ -127,7 +127,7 @@ function getStoreDocuments() {
   const url = `https://generativelanguage.googleapis.com/v1beta/${storeName}/documents?key=${apiKey}`;
   
   try {
-    const response = UrlFetchApp.fetch(url, { method: 'get', muteHttpExceptions: true });
+    const response = fetchWithBackoff(url, { method: 'get', muteHttpExceptions: true });
     if (response.getResponseCode() !== 200) return [];
     
     const data = JSON.parse(response.getContentText());
@@ -154,7 +154,7 @@ function deleteSelectedDocuments(docNames) {
   
   docNames.forEach(name => {
     const url = `https://generativelanguage.googleapis.com/v1beta/${name}?key=${apiKey}&force=true`;
-    UrlFetchApp.fetch(url, { method: 'delete', muteHttpExceptions: true });
+    fetchWithBackoff(url, { method: 'delete', muteHttpExceptions: true });
   });
   
   return true;
@@ -171,7 +171,7 @@ function deleteStoreComplete() {
   if (!storeName) return true;
 
   const url = `https://generativelanguage.googleapis.com/v1beta/${storeName}?key=${apiKey}&force=true`;
-  const response = UrlFetchApp.fetch(url, { method: 'delete', muteHttpExceptions: true });
+  const response = fetchWithBackoff(url, { method: 'delete', muteHttpExceptions: true });
   
   if (response.getResponseCode() === 200 || response.getResponseCode() === 404) {
     setConfigValue('ID_STORE_GEMINI', '');
@@ -196,7 +196,7 @@ function createFileSearchStore(apiKey) {
     payload: JSON.stringify(payload)
   };
 
-  const response = UrlFetchApp.fetch(url, options);
+  const response = fetchWithBackoff(url, options);
   const result = JSON.parse(response.getContentText());
   return result.name;
 }
@@ -245,7 +245,7 @@ function uploadFileToGeminiStore(file, storeName, apiKey) {
     muteHttpExceptions: true
   };
 
-  const response = UrlFetchApp.fetch(url, options);
+  const response = fetchWithBackoff(url, options);
   if (response.getResponseCode() !== 200) {
     let errorMsg = response.getContentText();
     try {

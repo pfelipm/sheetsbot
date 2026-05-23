@@ -62,7 +62,7 @@ function callGemini(prompt, history = []) {
     muteHttpExceptions: true
   };
 
-  const response = UrlFetchApp.fetch(url, options);
+  const response = fetchWithBackoff(url, options);
   const json = JSON.parse(response.getContentText());
 
   if (json.error) {

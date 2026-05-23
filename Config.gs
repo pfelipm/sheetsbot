@@ -123,3 +123,38 @@ function logInteraction(user, message, response, tokens) {
   const sheet = SS.getSheetByName(SHEET_LOG_NAME);
   sheet.appendRow([new Date(), user, message, response, tokens]);
 }
+
+/**
+ * Realiza una petición HTTP con reintentos (Exponential Backoff).
+ * Útil para manejar límites de cuota (429) y errores temporales del servidor (5xx).
+ */
+function fetchWithBackoff(url, options = {}, maxRetries = 4) {
+  let retries = 0;
+  let response;
+  
+  while (retries <= maxRetries) {
+    response = UrlFetchApp.fetch(url, options);
+    const code = response.getResponseCode();
+    
+    // Si es éxito (2xx), devolver respuesta
+    if (code >= 200 && code < 300) {
+      return response;
+    }
+    
+    // Si es un error que merece reintento (429 o 5xx)
+    if (code === 429 || (code >= 500 && code < 600)) {
+      if (retries === maxRetries) break;
+      
+      // Calcular espera: 2^retries * 1000ms + random jitter
+      const waitTime = Math.pow(2, retries) * 1000 + (Math.random() * 1000);
+      console.warn(`Error ${code}. Reintentando en ${Math.round(waitTime)}ms... (Intento ${retries + 1}/${maxRetries})`);
+      Utilities.sleep(waitTime);
+      retries++;
+    } else {
+      // Otros errores (400, 401, 403, 404) no se suelen reintentar
+      return response;
+    }
+  }
+  
+  return response;
+}
