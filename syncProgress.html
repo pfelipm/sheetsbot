@@ -74,9 +74,29 @@
 
       .results-area {
         display: none;
-        padding: 20px;
+        padding: 10px 10px 20px 10px;
         text-align: center;
       }
+
+      .result-summary {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+        background: #fafafa;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #eee;
+      }
+      .result-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .stat-val { font-size: 24px; font-weight: bold; }
+      .stat-label { font-size: 11px; text-transform: uppercase; color: #888; margin-top: 2px; }
+      .val-total { color: #1a73e8; }
+      .val-success { color: #2e7d32; }
+      .val-error { color: #d32f2f; }
 
       .btn-theme { background-color: #1a73e8 !important; }
       .btn-outline { 
@@ -170,10 +190,26 @@
 
         <!-- Estado 4: Resultados -->
         <div id="results-ui" class="results-area">
-          <i class="material-icons green-text" id="result-icon" style="font-size: 48px;">check_circle</i>
-          <h5 id="result-title">¡Completado!</h5>
-          <p id="result-detail" style="margin: 15px 0; font-size: 14px;"></p>
-          <button class="btn btn-theme waves-effect waves-light" onclick="google.script.host.close()">Cerrar</button>
+          <i class="material-icons green-text" id="result-icon" style="font-size: 56px;">check_circle</i>
+          <h5 id="result-title" style="margin-top: 10px; font-weight: bold; font-size: 1.2rem;">Sincronización completa</h5>
+          
+          <div class="result-summary">
+            <div class="result-stat">
+              <span class="stat-val val-total" id="stat-total">0</span>
+              <span class="stat-label">Total</span>
+            </div>
+            <div class="result-stat">
+              <span class="stat-val val-success" id="stat-success">0</span>
+              <span class="stat-label">Éxito</span>
+            </div>
+            <div class="result-stat">
+              <span class="stat-val val-error" id="stat-error">0</span>
+              <span class="stat-label">Errores</span>
+            </div>
+          </div>
+          
+          <p id="result-detail" class="grey-text" style="font-size: 13px; margin-bottom: 20px; line-height: 1.4;"></p>
+          <button class="btn btn-theme waves-effect waves-light" style="width: 100%; text-transform: none; border-radius: 20px;" onclick="google.script.host.close()">Finalizar y Cerrar</button>
         </div>
       </div>
     </div>
@@ -295,13 +331,17 @@
         document.getElementById('sync-ui').style.display = 'none';
         document.getElementById('results-ui').style.display = 'block';
         
-        const detail = `Procesados: ${fileList.length}<br>✅ Éxito: ${successCount}<br>❌ Errores: ${errorCount}`;
-        document.getElementById('result-detail').innerHTML = detail;
+        document.getElementById('stat-total').textContent = fileList.length;
+        document.getElementById('stat-success').textContent = successCount;
+        document.getElementById('stat-error').textContent = errorCount;
         
         if (errorCount > 0) {
-          document.getElementById('result-title').textContent = 'Finalizado con avisos';
-          document.getElementById('result-icon').textContent = 'info';
+          document.getElementById('result-title').textContent = 'Sincronización terminada';
+          document.getElementById('result-icon').textContent = 'error_outline';
           document.getElementById('result-icon').className = 'material-icons orange-text';
+          document.getElementById('result-detail').textContent = 'Algunos archivos no se pudieron procesar. Revisa los logs de Apps Script para más detalles.';
+        } else {
+          document.getElementById('result-detail').textContent = 'Todos los archivos han sido indexados correctamente en el almacén de Gemini.';
         }
       }
 
