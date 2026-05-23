@@ -35,7 +35,7 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
 
 1.  **Configuración Visual**: Gestiona todo desde la pestaña "Configuración": API Key, modelo, instrucciones de sistema y niveles de seguridad.
     <p align="center">
-      <img src="assets/hdc-configuración.png" alt="Panel de Configuración de SheetsBot" width="600">
+      <img src="assets/hdc-configuración.png" alt="Panel de Configuración de SheetsBot" width="100%">
     </p>
 
 2.  **Motor RAG Avanzado**: Implementa *Generación Aumentada por Recuperación* de forma nativa. El bot busca en tus archivos de Drive para dar respuestas precisas. Consulta aquí los [tipos de archivos soportados](https://ai.google.dev/gemini-api/docs/file-search#supported-files).
@@ -78,8 +78,8 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 
 #### 4. Despliegue de la WebApp
 En el editor de Apps Script, ve a **Implementar > Nueva implementación**, selecciona **Aplicación web** y elige el tipo de acceso:
-*   **Cualquiera (Uso anónimo)**: Ideal para bots públicos. No requiere que el usuario inicie sesión.
-*   **Cualquier persona con una cuenta de Google (o usuarios de tu dominio)**: El uso del chatbot requiere inicio de sesión y permite capturar la identidad (email) del usuario en cada interacción para su registro en el Log.
+*   **Cualquiera**: Uso anónimo. Ideal para bots públicos. Los usuarios no necesitan iniciar sesión y se registrarán como "Usuario anónimo" en el Log.
+*   **Usuarios con cuenta del dominio (Google Workspace)**: El uso del chatbot requiere inicio de sesión y permite capturar la identidad (email) del usuario en cada interacción para su registro en el Log. *Nota: Si seleccionas "Cualquier persona con una cuenta de Google", se exigirá inicio de sesión pero el script no podrá capturar el email del usuario por limitaciones de privacidad de Google.*
 
 ---
 
@@ -95,7 +95,7 @@ Cada interacción queda registrada automáticamente en la pestaña **Log**, incl
     *   En entornos **Google Workspace**, si el bot se despliega para el dominio, se capturará el **email del usuario** automáticamente para una trazabilidad completa.
 *   **Consumo de tokens**: Registro detallado para control de cuota y costes.
 <p align="center">
-  <img src="assets/hdc-log.png" alt="Registro de Actividad (Log)" width="600">
+  <img src="assets/hdc-log.png" alt="Registro de Actividad (Log)" width="100%">
 </p>
 
 ---
