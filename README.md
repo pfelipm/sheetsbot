@@ -74,9 +74,9 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
     *   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta donde guardas tus documentos de conocimiento.
     *   **Conocimiento**: El chatbot "sabe" todo lo que el modelo de Gemini seleccionado conoce de forma nativa. Al activar el **modo RAG**, este conocimiento se enriquece con tus propios contenidos. En este sentido, SheetsBot se comporta de forma similar a una **Gema de Gemini** a la que se le han facilitado archivos en su definición, más que a una aplicación de RAG estricto como NotebookLM.
 *   **Ajustes de aspecto**:
-    *   **CHAT_TITLE**: Personaliza el nombre que aparece en la cabecera del chat.
-    *   **CHAT_SUBTITLE**: Añade una descripción o lema bajo el título.
-    *   **CHAT_ACCENT_COLOR**: Define el color de acento de la interfaz (en formato hexadecimal, ej: `#0c1a78`).
+    *   **CHAT_TITULO**: Personaliza el nombre que aparece en la cabecera del chat.
+    *   **CHAT_SUBTITULO**: Añade una descripción o lema bajo el título.
+    *   **CHAT_COLOR_PRINCIPAL**: Define el color de acento de la interfaz (en formato hexadecimal, ej: `#0c1a78`).
 
 #### 3. Carga de conocimiento
 *   Si usas el modo RAG, selecciona **🤖 SheetsBot > 🔄 Sincronizar Conocimiento**.

@@ -51,9 +51,9 @@ function executeSetupSheet() {
     ['ID_STORE_GEMINI', '', 'ID del File Search Store (se genera automáticamente)'],
     ['INSTRUCCION_SISTEMA', 'Eres un asistente útil y amable llamado SheetsBot.', 'Instrucciones base para el comportamiento del bot'],
     ['THINKING_LEVEL', 'medium', 'Nivel de razonamiento (thinking) del modelo (low, medium, high)'],
-    ['CHAT_TITLE', '🤖 SheetsBot', 'Título de la ventana del chatbot'],
-    ['CHAT_SUBTITLE', 'Asistente impulsado por Gemini', 'Subtítulo de la ventana del chatbot'],
-    ['CHAT_ACCENT_COLOR', '#4a90e2', 'Color de acento (primary-color CSS) de la ventana del chatbot']
+    ['CHAT_TITULO', '🤖 SheetsBot', 'Título de la ventana del chatbot'],
+    ['CHAT_SUBTITULO', 'Asistente impulsado por Gemini', 'Subtítulo de la ventana del chatbot'],
+    ['CHAT_COLOR_PRINCIPAL', '#4a90e2', 'Color de acento (primary-color CSS) de la ventana del chatbot']
   ];
   configSheet.getRange(1, 1, configData.length, 3).setValues(configData);
   
@@ -123,8 +123,8 @@ function getConfig() {
   }
   
   // Normalizar color si es necesario
-  if (config.CHAT_ACCENT_COLOR && !config.CHAT_ACCENT_COLOR.startsWith('#')) {
-    config.CHAT_ACCENT_COLOR = '#' + config.CHAT_ACCENT_COLOR;
+  if (config.CHAT_COLOR_PRINCIPAL && !config.CHAT_COLOR_PRINCIPAL.startsWith('#')) {
+    config.CHAT_COLOR_PRINCIPAL = '#' + config.CHAT_COLOR_PRINCIPAL;
   }
   
   return config;
