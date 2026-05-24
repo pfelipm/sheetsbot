@@ -29,6 +29,14 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
   <img src="assets/infografía.png" alt="Infografía de SheetsBot" width="800">
 </p>
 
+<p align="center">
+  <a href="https://youtu.be/4ox_Xhyz0Mc">
+    <img src="https://img.youtube.com/vi/4ox_Xhyz0Mc/maxresdefault.jpg" alt="Ver video explicativo de SheetsBot" width="600">
+  </a>
+  <br>
+  🎬 <i>Haz clic en la imagen para ver el video explicativo del proyecto</i>
+</p>
+
 ---
 
 ### ✨ Características principales
