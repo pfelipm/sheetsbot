@@ -86,6 +86,22 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
     *   **CHAT_SUBTITULO**: Añade una descripción o lema bajo el título.
     *   **CHAT_COLOR_PRINCIPAL**: Define el color de acento de la interfaz (en formato hexadecimal, ej: `#0c1a78`).
 
+> ⚠️ **Nota importante para cuentas Workspace educativas**: En este tipo de cuentas, las claves de API obtenidas a través de AI Studio suelen fallar con el error *"Your project has been denied access"*. Para solucionarlo, debes crear una clave vinculada a un proyecto de Google Cloud (GCP) siguiendo estos pasos:
+> 1. Accede a [proyectos de Google Cloud](https://console.cloud.google.com/projectcreate) y crea uno nuevo.
+> 2. Ve a **APIs y servicios > Biblioteca**, busca **Gemini API** y actívala.
+> 3. En el menú lateral, entra en **Credenciales** (no en el panel de la API).
+> 4. Pulsa **Crear credenciales > Cuenta de servicio** y dale un nombre (el resto de opciones por defecto).
+> 5. Pulsa **Crear credenciales > Clave de API**.
+> 6. En el panel lateral derecho:
+>    - Marca **"Autenticar las llamadas a la API a través de una cuenta de servicio"**.
+>    - Selecciona la **cuenta de servicio** que acabas de crear.
+>    - En el selector de API, elige **Gemini API** y pulsa **Crear**.
+> 7. Copia esa clave y pégala en la configuración de SheetsBot.
+>
+> <p align="center">
+>   <img src="assets/api-key-gcp-edu.png" alt="Configuración de clave API en GCP para cuentas educativas" width="500">
+> </p>
+
 #### 3. Carga de conocimiento
 *   Si usas el modo RAG, selecciona **🤖 SheetsBot > 🔄 Sincronizar Conocimiento**.
 *   Podrás elegir entre **Añadir nuevos** archivos o realizar una **Limpieza total**.
