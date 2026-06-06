@@ -75,6 +75,13 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 > 👉 **[Plantilla de SheetsBot](https://docs.google.com/spreadsheets/d/1LMaOotpm1fHamoVXGhtQkSRy1_HMEDtNSXfAIrN9IRY/edit?usp=sharing)**
 
 #### 2. Configuración del bot
+
+> ⚠️ **ADVERTENCIA CRÍTICA DE PRIVACIDAD**
+>
+> Si utilizas la **API de Gemini en su modalidad gratuita**, Google **puede utilizar tus datos, documentos y las interacciones de tus usuarios para entrenar y mejorar sus modelos**. 
+>
+> Si la privacidad es una prioridad o vas a manejar información sensible, es **imprescindible utilizar una clave de API vinculada a un proyecto con la facturación habilitada**. En el nivel de pago (Pay-as-you-go), Google no utiliza los datos de los clientes para el entrenamiento de sus modelos. Más información en los [Términos de Servicio de la API de Gemini](https://ai.google.dev/gemini-api/terms#data-use).
+
 *   **Ajustes de inteligencia**:
     *   **API_KEY**: Obtén tu clave en [Google AI Studio](https://aistudio.google.com/api-keys).
     *   **MODELO**: Elige el modelo (ej: `gemini-flash-latest`). Puedes consultar aquí la lista completa de [modelos y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations).
