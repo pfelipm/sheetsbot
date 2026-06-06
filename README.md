@@ -88,7 +88,7 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 
 > ⚠️ **Nota importante para cuentas Workspace educativas**: En este tipo de cuentas, las claves de API obtenidas a través de AI Studio suelen fallar con el error *"Your project has been denied access" (403)*. 
 > 
-> Como posible solución (no definitiva), puedes intentar crear una clave vinculada a un proyecto de Google Cloud (GCP) con cuenta de servicio siguiendo estos pasos: [ver guía detallada](https://github.com/pfelipm/sheetsbot/blob/main/README.md#apéndice-solución-manual-para-cuentas-educativas).
+> Como posible solución (no definitiva), puedes intentar crear una clave vinculada a un proyecto de Google Cloud (GCP) con cuenta de servicio siguiendo estos pasos: [ver guía detallada](#-apéndice-solución-manual-para-cuentas-educativas).
 >
 > El creador del proyecto está [investigando este problema](https://discuss.ai.google.dev/t/403-errors-from-the-gemini-api-in-workspace-for-education-accounts/169737). Si los errores 403 persisten tras el proceso manual, puedes reportarlos a Google usando [este formulario oficial](https://docs.google.com/forms/d/e/1FAIpQLSfei9OxKYFBycc5mWK3dG-OLUB058YjWBFfJmFZyOXL7WaQlg/viewform).
 
