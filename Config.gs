@@ -50,7 +50,7 @@ function executeSetupSheet() {
     ['ID_CARPETA_DRIVE', '', 'ID de la carpeta de Drive con el conocimiento'],
     ['ID_STORE_GEMINI', '', 'ID del File Search Store (se genera automáticamente)'],
     ['INSTRUCCION_SISTEMA', 'Eres un asistente útil y amable llamado SheetsBot.', 'Instrucciones base para el comportamiento del bot'],
-    ['THINKING_LEVEL', 'medium', 'Nivel de razonamiento (thinking) del modelo (low, medium, high)'],
+    ['THINKING_LEVEL', 'low', 'Nivel de razonamiento (thinking) del modelo (low, medium, high)'],
     ['CHAT_TITULO', '🤖 SheetsBot', 'Título de la ventana del chatbot'],
     ['CHAT_SUBTITULO', 'Asistente impulsado por Gemini', 'Subtítulo de la ventana del chatbot'],
     ['CHAT_COLOR_PRINCIPAL', '#4a90e2', 'Color de acento (primary-color CSS) de la ventana del chatbot']
