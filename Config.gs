@@ -41,7 +41,7 @@ function executeSetupSheet() {
   const configData = [
     ['Ajuste', 'Valor', 'Descripción'],
     ['API_KEY', '', 'Tu clave de Google AI Studio (BYOK)'],
-    ['MODELO', 'gemini-flash-latest', 'Escoge el modelo (gemini-flash-latest recomendado)'],
+    ['MODELO', 'gemini-3.1-flash-lite', 'Escoge el modelo (gemini-3.1-flash-lite recomendado)'],
     ['FILTRO_ACOSO', 'BLOCK_MEDIUM_AND_ABOVE', 'Nivel de bloqueo para acoso'],
     ['FILTRO_ODIO', 'BLOCK_MEDIUM_AND_ABOVE', 'Nivel de bloqueo para discurso de odio'],
     ['FILTRO_SEXUAL', 'BLOCK_MEDIUM_AND_ABOVE', 'Nivel de bloqueo para contenido sexual'],
@@ -59,13 +59,11 @@ function executeSetupSheet() {
   
   // Añadir validación de datos (desplegable) para el modelo en B3
   const models = [
-    'gemini-1.5-flash', 
-    'gemini-1.5-pro',
-    'gemini-3.1-flash-lite', 
-    'gemini-3.1-flash-lite-preview', 
-    'gemini-3.1-pro-preview', 
-    'gemini-3-flash-preview', 
-    'gemini-3-pro-image-preview',
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
+    'gemini-3-flash-preview',
+    'gemini-3.1-flash-lite',
+    'gemini-3.1-pro-preview',
     'gemini-flash-latest',
     'gemini-pro-latest'
   ];
