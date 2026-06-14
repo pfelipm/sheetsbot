@@ -93,6 +93,7 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
     *   **CHAT_TITULO**: Personaliza el nombre que aparece en la cabecera del chat.
     *   **CHAT_SUBTITULO**: Añade una descripción o lema bajo el título.
     *   **CHAT_COLOR_PRINCIPAL**: Define el color de acento de la interfaz (en formato hexadecimal, ej: `#0c1a78`).
+    *   **CHAT_SALUDO_ASISTENTE**: Configura el mensaje de bienvenida que el usuario verá al abrir el chat.
 
 > ⚠️ **Nota importante para cuentas Workspace educativas**: En este tipo de cuentas, las claves de API obtenidas a través de AI Studio suelen fallar con el error *"Your project has been denied access" (403)*. 
 > 
