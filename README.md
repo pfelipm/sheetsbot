@@ -85,7 +85,7 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 *   **Ajustes de inteligencia**:
     *   **API_KEY**: Obtén tu clave en [Google AI Studio](https://aistudio.google.com/api-keys).
     *   **MODELO**: Elige el modelo (ej: `gemini-3.1-flash-lite`). Puedes consultar la lista completa de [modelos y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations) en la documentación oficial o usar este [dashboard de modelos de Gemini](https://pfelipm.github.io/gemini-models/) para una comparativa visual y actualizada.
-    *   **THINKING_LEVEL**: Define el nivel de razonamiento (ej: `low`). Para la mayoría de casos de uso y para optimizar la velocidad de respuesta, se recomienda utilizar el modelo `gemini-3.1-flash-lite` con un nivel `low`.
+    *   **THINKING_LEVEL**: Define el nivel de razonamiento (ej: `low`). Para la mayoría de casos de uso, optimizar la velocidad de respuesta y **exprimir al máximo el nivel gratuito de la API**, se recomienda utilizar el modelo `gemini-3.1-flash-lite` con un nivel `low`.
     *   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos de Drive.
     *   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta donde guardas tus documentos de conocimiento.
     *   **Conocimiento**: El chatbot "sabe" todo lo que el modelo de Gemini seleccionado conoce de forma nativa. Al activar el **modo RAG**, este conocimiento se enriquece con tus propios contenidos. En este sentido, SheetsBot se comporta de forma similar a una **Gema de Gemini** a la que se le han facilitado archivos en su definición, más que a una aplicación de RAG estricto como NotebookLM.
