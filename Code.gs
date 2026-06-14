@@ -14,6 +14,7 @@ function doGet() {
   template.chatTitle = config.CHAT_TITULO || '🤖 SheetsBot';
   template.chatSubtitle = config.CHAT_SUBTITULO || 'Asistente impulsado por Gemini';
   template.accentColor = config.CHAT_COLOR_PRINCIPAL || '#4a90e2';
+  template.chatGreeting = config.CHAT_SALUDO_ASISTENTE || '¡Hola! Soy tu asistente inteligente. ¿En qué puedo ayudarte hoy?';
   
   return template.evaluate()
       .setTitle(template.chatTitle)

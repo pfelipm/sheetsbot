@@ -53,7 +53,8 @@ function executeSetupSheet() {
     ['THINKING_LEVEL', 'low', 'Nivel de razonamiento (thinking) del modelo (low, medium, high)'],
     ['CHAT_TITULO', '🤖 SheetsBot', 'Título de la ventana del chatbot'],
     ['CHAT_SUBTITULO', 'Asistente impulsado por Gemini', 'Subtítulo de la ventana del chatbot'],
-    ['CHAT_COLOR_PRINCIPAL', '#4a90e2', 'Color de acento (primary-color CSS) de la ventana del chatbot']
+    ['CHAT_COLOR_PRINCIPAL', '#4a90e2', 'Color de acento (primary-color CSS) de la ventana del chatbot'],
+    ['CHAT_SALUDO_ASISTENTE', '¡Hola! Soy tu asistente inteligente. ¿En qué puedo ayudarte hoy?', 'Mensaje con el que el chatbot recibe al usuario']
   ];
   configSheet.getRange(1, 1, configData.length, 3).setValues(configData);
   
