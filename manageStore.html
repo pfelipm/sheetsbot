@@ -79,7 +79,7 @@
         display: none;
         background: #f8f9fa;
         border-bottom: 1px solid #e0e0e0;
-        padding: 14px 18px;
+        padding: 12px 16px;
         animation: fadeIn 0.2s ease;
       }
       @keyframes fadeIn {
@@ -90,14 +90,13 @@
       .upload-tabs {
         display: flex;
         gap: 8px;
-        margin-bottom: 12px;
         border-bottom: 1px solid #ddd;
         padding-bottom: 6px;
       }
       .upload-tab-btn {
         background: none;
         border: none;
-        padding: 6px 12px;
+        padding: 5px 12px;
         font-size: 13px;
         font-weight: 500;
         color: #5f6368;
@@ -105,7 +104,7 @@
         border-radius: 4px;
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
       }
       .upload-tab-btn.active {
         color: #1a73e8;
@@ -115,7 +114,7 @@
       .drop-zone {
         border: 2px dashed #dadce0;
         border-radius: 6px;
-        padding: 16px;
+        padding: 14px;
         text-align: center;
         background: #ffffff;
         cursor: pointer;
@@ -126,17 +125,52 @@
         background: #f1f7fe;
       }
 
+      /* Lista de archivos en cola */
+      .queue-list-container {
+        max-height: 120px;
+        overflow-y: auto;
+        border: 1px solid #dadce0;
+        border-radius: 4px;
+        background: white;
+        margin-top: 8px;
+      }
+      .queue-item {
+        padding: 6px 10px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12.5px;
+      }
+      .queue-item:last-child { border-bottom: none; }
+      .queue-file-info {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        overflow: hidden;
+        flex: 1;
+      }
+      .queue-name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 500;
+        color: #202124;
+      }
+      .queue-size { color: #70757a; font-size: 11px; white-space: nowrap; }
+
       .drive-url-row {
         display: flex;
         gap: 8px;
         align-items: center;
+        margin-top: 6px;
       }
       .drive-url-row input {
         background: white !important;
         border: 1px solid #dadce0 !important;
         border-radius: 4px !important;
         padding: 0 10px !important;
-        height: 36px !important;
+        height: 34px !important;
         box-sizing: border-box !important;
         font-size: 13px !important;
         margin: 0 !important;
@@ -254,13 +288,26 @@
         text-transform: none !important;
         font-weight: 500;
         border-radius: 4px;
-        height: 36px;
-        line-height: 36px;
+        height: 34px;
+        line-height: 34px;
         padding: 0 14px;
         font-size: 13px;
         display: inline-flex;
         align-items: center;
         gap: 4px;
+      }
+
+      .btn-secondary-action {
+        background-color: #ffffff !important;
+        color: #5f6368 !important;
+        border: 1px solid #dadce0 !important;
+        text-transform: none !important;
+        font-weight: 500;
+        border-radius: 4px;
+        height: 34px;
+        line-height: 32px;
+        padding: 0 12px;
+        font-size: 12.5px;
       }
 
       .row-working { background-color: #e8f0fe !important; }
@@ -301,13 +348,13 @@
 
         <!-- Panel de subida desplegable -->
         <div id="upload-panel">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <div class="upload-tabs">
               <button class="upload-tab-btn active" id="tab-btn-local" onclick="switchUploadTab('local')">
-                <i class="material-icons" style="font-size: 16px;">computer</i>Archivo local
+                <i class="material-icons" style="font-size: 15px;">computer</i>Archivos locales
               </button>
               <button class="upload-tab-btn" id="tab-btn-drive" onclick="switchUploadTab('drive')">
-                <i class="material-icons" style="font-size: 16px;">cloud</i>Enlace de Google Drive
+                <i class="material-icons" style="font-size: 15px;">cloud</i>Enlace de Google Drive
               </button>
             </div>
             <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="toggleUploadPanel(false)" title="Cerrar panel">
@@ -315,33 +362,37 @@
             </button>
           </div>
 
-          <!-- Pestaña 1: Archivo local -->
+          <!-- Pestaña 1: Archivos locales (con soporte múltiple) -->
           <div id="tab-content-local">
-            <input type="file" id="local-file-picker" style="display: none;" onchange="handleFileChosen(event)" accept=".pdf,.docx,.doc,.txt,.csv,.md,.json,.xlsx,.xls,.png,.jpg,.jpeg,.webp">
+            <input type="file" id="local-file-picker" multiple style="display: none;" onchange="handleFilesChosen(event)" accept=".pdf,.docx,.doc,.txt,.csv,.md,.json,.xlsx,.xls,.png,.jpg,.jpeg,.webp">
+            
             <div class="drop-zone" id="drop-zone" onclick="document.getElementById('local-file-picker').click()">
-              <i class="material-icons blue-text" style="font-size: 32px; margin-bottom: 4px;">upload_file</i>
+              <i class="material-icons blue-text" style="font-size: 28px; margin-bottom: 2px;">upload_file</i>
               <div style="font-size: 13px; font-weight: 500; color: #202124;">
-                Arrastra un archivo aquí o haz clic para examinar
+                Arrastra uno o varios archivos aquí o pulsa para examinar
               </div>
               <div style="font-size: 11px; color: #70757a; margin-top: 2px;">
                 PDF, Docs, Sheets, TXT, DOCX, Markdown, imágenes...
               </div>
             </div>
-            <div id="selected-file-info" style="display: none; align-items: center; justify-content: space-between; margin-top: 10px; background: white; padding: 8px 12px; border-radius: 4px; border: 1px solid #dadce0;">
-              <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
-                <i class="material-icons blue-text" style="font-size: 20px;">description</i>
-                <span id="selected-file-name" style="font-size: 13px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"></span>
-                <span id="selected-file-size" style="font-size: 11.5px; color: #70757a;"></span>
+
+            <!-- Lista de cola de archivos seleccionados -->
+            <div id="file-queue-box" style="display: none; margin-top: 8px;">
+              <div class="queue-list-container" id="queue-items-list"></div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                <button class="btn-flat btn-small-flat btn-secondary-action" onclick="clearFileQueue()">Limpiar cola</button>
+                <button class="btn waves-effect waves-light btn-primary-action" id="btn-upload-local-batch" onclick="uploadQueuedFiles()">
+                  <i class="material-icons left" style="font-size: 16px; margin-right: 4px;">cloud_upload</i>
+                  <span id="btn-upload-text">Subir archivos</span>
+                </button>
               </div>
-              <button class="btn waves-effect waves-light btn-primary-action" id="btn-upload-local" onclick="uploadLocalFileSelected()">
-                <i class="material-icons left" style="font-size: 16px; margin-right: 4px;">cloud_upload</i>Subir
-              </button>
             </div>
           </div>
 
           <!-- Pestaña 2: Enlace de Google Drive -->
           <div id="tab-content-drive" style="display: none;">
-            <div style="font-size: 12px; color: #5f6368; margin-bottom: 6px;">
+            <div style="font-size: 12px; color: #5f6368; margin-bottom: 4px;">
               Pega el enlace de compartir o el ID de cualquier archivo de Drive (Docs, Sheets, PDF...):
             </div>
             <div class="drive-url-row">
@@ -353,7 +404,7 @@
           </div>
 
           <!-- Barra de progreso de subida -->
-          <div id="upload-progress-box" style="display: none; align-items: center; gap: 10px; margin-top: 10px; background: #e8f0fe; padding: 8px 12px; border-radius: 4px; color: #1a73e8; font-size: 13px;">
+          <div id="upload-progress-box" style="display: none; align-items: center; gap: 10px; margin-top: 8px; background: #e8f0fe; padding: 7px 12px; border-radius: 4px; color: #1a73e8; font-size: 12.5px;">
             <div class="mini-spinner"></div>
             <span id="upload-progress-text">Procesando e indexando documento en Gemini...</span>
           </div>
@@ -387,7 +438,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
       let documents = [];
-      let currentChosenFile = null;
+      let fileQueue = [];
+      let isUploadingBatch = false;
 
       window.onload = () => {
         setupDragAndDrop();
@@ -527,6 +579,13 @@
         const isVisible = (panel.style.display === 'block');
         const nextState = (typeof forceState === 'boolean') ? forceState : !isVisible;
         panel.style.display = nextState ? 'block' : 'none';
+        
+        // Ajustar altura dinámica del diálogo modal
+        if (nextState) {
+          google.script.host.setHeight(650);
+        } else {
+          google.script.host.setHeight(560);
+        }
       }
 
       function switchUploadTab(tab) {
@@ -555,66 +614,154 @@
         });
 
         dropZone.addEventListener('drop', (e) => {
-          const files = e.dataTransfer.files;
+          const files = Array.from(e.dataTransfer.files || []);
           if (files.length > 0) {
-            selectLocalFile(files[0]);
+            addFilesToQueue(files);
           }
         }, false);
       }
 
-      function handleFileChosen(e) {
-        if (e.target.files && e.target.files.length > 0) {
-          selectLocalFile(e.target.files[0]);
+      function handleFilesChosen(e) {
+        const files = Array.from(e.target.files || []);
+        if (files.length > 0) {
+          addFilesToQueue(files);
         }
       }
 
-      function selectLocalFile(file) {
-        currentChosenFile = file;
-        document.getElementById('selected-file-name').textContent = file.name;
-        const sizeKb = (file.size / 1024).toFixed(1);
-        document.getElementById('selected-file-size').textContent = `(${sizeKb} KB)`;
-        document.getElementById('selected-file-info').style.display = 'flex';
+      function addFilesToQueue(newFiles) {
+        newFiles.forEach(f => {
+          if (!fileQueue.some(item => item.file.name === f.name && item.file.size === f.size)) {
+            fileQueue.push({ file: f, status: 'pending' });
+          }
+        });
+        renderQueue();
       }
 
-      function uploadLocalFileSelected() {
-        if (!currentChosenFile) return;
+      function removeQueueItem(index) {
+        if (isUploadingBatch) return;
+        fileQueue.splice(index, 1);
+        renderQueue();
+      }
+
+      function clearFileQueue() {
+        if (isUploadingBatch) return;
+        fileQueue = [];
+        document.getElementById('local-file-picker').value = '';
+        renderQueue();
+      }
+
+      function renderQueue() {
+        const box = document.getElementById('file-queue-box');
+        const list = document.getElementById('queue-items-list');
+        const btnText = document.getElementById('btn-upload-text');
         
-        // Comprobar límite de 50MB
-        if (currentChosenFile.size > 50 * 1024 * 1024) {
-          customAlert('El archivo supera el límite de 50 MB permitido por Google Apps Script.');
+        if (fileQueue.length === 0) {
+          box.style.display = 'none';
           return;
         }
 
-        setUploadLoading(true, `Subiendo ${currentChosenFile.name}...`);
+        box.style.display = 'block';
+        btnText.textContent = (fileQueue.length === 1) ? 'Subir archivo' : `Subir ${fileQueue.length} archivos`;
+
+        let html = '';
+        fileQueue.forEach((item, idx) => {
+          const sizeKb = (item.file.size / 1024).toFixed(1);
+          let statusIcon = `<button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="removeQueueItem(${idx})" title="Quitar archivo" style="padding:0; margin:0;"><i class="material-icons" style="font-size:16px;">close</i></button>`;
+          
+          if (item.status === 'working') {
+            statusIcon = '<div class="mini-spinner"></div>';
+          } else if (item.status === 'success') {
+            statusIcon = '<i class="material-icons tiny green-text">check_circle</i>';
+          } else if (item.status === 'error') {
+            statusIcon = '<i class="material-icons tiny red-text">error</i>';
+          }
+
+          html += `
+            <div class="queue-item" id="queue-item-${idx}">
+              <div class="queue-file-info">
+                <i class="material-icons tiny blue-text">description</i>
+                <span class="queue-name" title="${item.file.name}">${item.file.name}</span>
+                <span class="queue-size">(${sizeKb} KB)</span>
+              </div>
+              <div>${statusIcon}</div>
+            </div>
+          `;
+        });
+        list.innerHTML = html;
+      }
+
+      async function uploadQueuedFiles() {
+        if (fileQueue.length === 0 || isUploadingBatch) return;
+
+        isUploadingBatch = true;
+        setUploadLoading(true, `Iniciando subida de ${fileQueue.length} archivo(s)...`);
         
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const base64Data = e.target.result.split(',')[1];
-          google.script.run
-            .withSuccessHandler((res) => {
-              setUploadLoading(false);
-              if (res.success) {
-                M.toast({html: `✅ Archivo "${res.fileName}" añadido al conocimiento`, classes: 'green darken-1'});
-                currentChosenFile = null;
-                document.getElementById('selected-file-info').style.display = 'none';
-                document.getElementById('local-file-picker').value = '';
-                toggleUploadPanel(false);
-                loadDocuments();
-              } else {
-                customAlert('Error al subir: ' + res.error);
-              }
-            })
-            .withFailureHandler((err) => {
-              setUploadLoading(false);
-              customAlert('Error crítico al subir: ' + err.message);
-            })
-            .uploadLocalFile({
-              name: currentChosenFile.name,
-              type: currentChosenFile.type,
-              base64: base64Data
-            });
-        };
-        reader.readAsDataURL(currentChosenFile);
+        let successCount = 0;
+        let errorCount = 0;
+
+        for (let i = 0; i < fileQueue.length; i++) {
+          const item = fileQueue[i];
+          if (item.status === 'success') continue;
+
+          item.status = 'working';
+          renderQueue();
+          setUploadLoading(true, `Subiendo (${i + 1}/${fileQueue.length}): ${item.file.name}...`);
+
+          // Validación de tamaño (50MB)
+          if (item.file.size > 50 * 1024 * 1024) {
+            item.status = 'error';
+            errorCount++;
+            renderQueue();
+            continue;
+          }
+
+          const base64Data = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+            reader.readAsDataURL(item.file);
+          });
+
+          const result = await new Promise((resolve) => {
+            google.script.run
+              .withSuccessHandler(resolve)
+              .withFailureHandler((err) => resolve({ success: false, error: err.message }))
+              .uploadLocalFile({
+                name: item.file.name,
+                type: item.file.type,
+                base64: base64Data
+              });
+          });
+
+          if (result.success) {
+            item.status = 'success';
+            successCount++;
+          } else {
+            item.status = 'error';
+            errorCount++;
+          }
+          renderQueue();
+        }
+
+        isUploadingBatch = false;
+        setUploadLoading(false);
+
+        if (successCount > 0) {
+          M.toast({html: `✅ ${successCount} archivo(s) añadido(s) al conocimiento`, classes: 'green darken-1'});
+        }
+        if (errorCount > 0) {
+          customAlert(`Se completó la subida con ${errorCount} error(es).`);
+        }
+
+        // Si todo fue un éxito, limpiar cola y cerrar panel tras breve pausa
+        if (errorCount === 0) {
+          setTimeout(() => {
+            clearFileQueue();
+            toggleUploadPanel(false);
+            loadDocuments();
+          }, 800);
+        } else {
+          loadDocuments();
+        }
       }
 
       function uploadDriveFileSubmitted() {
@@ -647,7 +794,7 @@
 
       function setUploadLoading(isLoading, text) {
         const progressBox = document.getElementById('upload-progress-box');
-        const btnUploadLocal = document.getElementById('btn-upload-local');
+        const btnUploadLocal = document.getElementById('btn-upload-local-batch');
         const btnUploadDrive = document.getElementById('btn-upload-drive');
         
         if (isLoading) {
@@ -721,7 +868,10 @@
           M.toast({html: `Eliminación finalizada (${successCount} éxitos, ${errorCount} errores)`});
           
           const topBarReset = document.querySelector('.top-bar');
-          if (topBarReset) topBarReset.style.opacity = '1';
+          if (topBarReset) {
+            topBarReset.style.opacity = '1';
+            topBarReset.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
+          }
           
           // Recargar lista tras una pequeña espera
           setTimeout(loadDocuments, 1500);
@@ -771,7 +921,10 @@
           footer.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
         }
         const topBar = document.querySelector('.top-bar');
-        if (topBar) topBar.style.opacity = '1';
+        if (topBar) {
+          topBar.style.opacity = '1';
+          topBar.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
+        }
         customAlert('<b>Error</b>: ' + err.message);
         loadDocuments();
       }
