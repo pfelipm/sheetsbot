@@ -187,6 +187,21 @@
         align-items: center;
       }
 
+      .btn-close-flat {
+        color: #5f6368 !important;
+        text-transform: none !important;
+        font-weight: 500;
+        border-radius: 4px;
+        height: 36px;
+        line-height: 36px;
+        padding: 0 16px;
+        box-shadow: none !important;
+      }
+
+      .btn-close-flat:hover {
+        background-color: #e8eaed !important;
+      }
+
       .tip-box {
         background: #e8f0fe;
         border-left: 4px solid #1a73e8;
@@ -285,7 +300,7 @@
       </div>
 
       <div class="footer-controls">
-        <button class="btn-flat waves-effect" onclick="google.script.host.close()">Cerrar</button>
+        <button class="btn-flat waves-effect btn-close-flat" onclick="google.script.host.close()">Cerrar</button>
       </div>
     </div>
 
