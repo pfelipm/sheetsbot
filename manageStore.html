@@ -357,7 +357,7 @@
                 <i class="material-icons" style="font-size: 15px;">cloud</i>Enlace de Google Drive
               </button>
             </div>
-            <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="toggleUploadPanel(false)" title="Cerrar panel">
+            <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" id="btn-close-upload-panel" onclick="toggleUploadPanel(false)" title="Cerrar panel">
               <i class="material-icons" style="font-size: 18px;">close</i>
             </button>
           </div>
@@ -497,12 +497,13 @@
         const footer = document.getElementById('footer-container');
         const selectionControls = document.getElementById('selection-controls');
         
-        // Re-habilitar botón Añadir documento y controles de la barra superior
+        // Re-habilitar botón Añadir documento y controles de la barra superior y panel de subida
         const topBar = document.querySelector('.top-bar');
         if (topBar) {
           topBar.style.opacity = '1';
           topBar.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
         }
+        document.querySelectorAll('#upload-panel button, #btn-close-upload-panel').forEach(el => el.disabled = false);
 
         if (!documents || documents.length === 0) {
           selectionControls.style.display = 'none';
@@ -827,11 +828,17 @@
         }
 
         customConfirm(`¿Estás seguro de que deseas eliminar <b>${selectedChecks.length}</b> archivo(s)?`, async () => {
-          // Desactivar controles
-          document.querySelectorAll('.btn, .btn-flat, .doc-check').forEach(el => el.disabled = true);
-          document.querySelector('.footer-actions').style.opacity = '0.5';
-          const topBar = document.querySelector('.top-bar');
-          if (topBar) topBar.style.opacity = '0.5';
+          // Desactivar controles de tabla y pie
+          document.querySelectorAll('.doc-check').forEach(el => el.disabled = true);
+          const footerActions = document.getElementById('footer-container');
+          if (footerActions) {
+            footerActions.style.opacity = '0.5';
+            footerActions.querySelectorAll('button').forEach(el => el.disabled = true);
+          }
+          const selControls = document.getElementById('selection-controls');
+          if (selControls) {
+            selControls.querySelectorAll('button').forEach(el => el.disabled = true);
+          }
 
           let successCount = 0;
           let errorCount = 0;
@@ -925,6 +932,7 @@
           topBar.style.opacity = '1';
           topBar.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
         }
+        document.querySelectorAll('#upload-panel button, #btn-close-upload-panel').forEach(el => el.disabled = false);
         customAlert('<b>Error</b>: ' + err.message);
         loadDocuments();
       }
