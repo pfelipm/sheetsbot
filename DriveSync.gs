@@ -316,9 +316,10 @@ function openChatbot() {
 function showDeployWizard() {
   const template = HtmlService.createTemplateFromFile('deployWizard');
   template.currentUrl = getSavedWebAppUrl() || '';
+  template.editorUrl = 'https://script.google.com/home/projects/' + ScriptApp.getScriptId() + '/edit';
   const html = template.evaluate()
-      .setWidth(580)
-      .setHeight(650);
+      .setWidth(600)
+      .setHeight(680);
   SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }
 

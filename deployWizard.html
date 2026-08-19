@@ -91,9 +91,12 @@
         display: flex;
         gap: 8px;
         align-items: center;
+        width: 100%;
       }
 
       .url-input-row input {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
         background: white !important;
         border: 1px solid #dadce0 !important;
         border-radius: 4px !important;
@@ -106,6 +109,8 @@
       }
 
       .btn-primary {
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
         background-color: #1a73e8 !important;
         text-transform: none !important;
         font-weight: 500;
@@ -115,6 +120,27 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
+      }
+
+      .btn-editor {
+        background-color: #f1f3f4 !important;
+        color: #1a73e8 !important;
+        border: 1px solid #dadce0 !important;
+        text-transform: none !important;
+        font-weight: 500;
+        border-radius: 4px;
+        height: 30px;
+        line-height: 28px;
+        padding: 0 10px;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: none !important;
+        font-size: 12px;
+        margin-top: 5px;
+      }
+      .btn-editor:hover {
+        background-color: #e8f0fe !important;
+        border-color: #1a73e8 !important;
       }
 
       .btn-success {
@@ -185,8 +211,14 @@
         <!-- Pasos para desplegar -->
         <div class="step-item">
           <div class="step-badge">1</div>
-          <div class="step-text">
-            En la barra superior de Sheets, abre <b>Extensiones > Apps Script</b>.
+          <div class="step-text" style="flex: 1;">
+            Abre el editor de Apps Script (desde <b>Extensiones > Apps Script</b> o mediante el siguiente botón):
+            <div>
+              <a href="<?= editorUrl ?>" target="_blank" class="btn waves-effect btn-editor">
+                <i class="material-icons left" style="font-size: 16px; margin-right: 4px;">open_in_new</i>
+                Abrir Editor de Apps Script
+              </a>
+            </div>
           </div>
         </div>
 
