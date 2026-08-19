@@ -3,7 +3,7 @@
  * Controladores principales de la WebApp, menú y diálogos de SheetsBot.
  */
 
-const VERSION = 'v1.1 (agosto 2026)';
+const VERSION = 'v1.5 (agosto 2026)';
 
 /**
  * Sirve la página principal de la WebApp.

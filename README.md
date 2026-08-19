@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Versión-v1.1_(agosto_2026)-indigo" alt="Versión">
+  <img src="https://img.shields.io/badge/Versión-v1.5_(agosto_2026)-indigo" alt="Versión">
   <img src="https://img.shields.io/badge/Licencia-GPL_v3-blue" alt="Licencia">
 </p>
 
@@ -22,7 +22,7 @@
 A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para ser:
 1.  **Privado y controlado**: Todo ocurre en tu entorno de Google Apps Script. Las llamadas a la API están ocultas en el backend.
 2.  **Accesible y anónimo**: Los usuarios finales **no necesitan iniciar sesión** en su cuenta de Google ni en ninguna otra plataforma para interactuar con el bot.
-3.  **Experto en tus datos (RAG)**: Gracias a la integración con la capacidad de [**File Search**](https://ai.google.dev/gemini-api/docs/file-search) de Gemini, el bot puede "aprender" de los documentos que tengas en una carpeta de Google Drive.
+3.  **Experto en tus datos (RAG)**: Gracias a la integración con la capacidad de [**File Search**](https://ai.google.dev/gemini-api/docs/file-search) de Gemini, el bot puede "aprender" de tus propios documentos (carpetas completas de Drive, archivos locales o enlaces individuales).
 4.  **Seguro**: Permite ajustar los niveles de seguridad de la API para adaptar las respuestas a diferentes tipos de público.
 
 <p align="center">
@@ -46,16 +46,16 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
       <img src="assets/hdc-configuración.png" alt="Panel de Configuración de SheetsBot" width="100%">
     </p>
 
-2.  **Motor RAG avanzado**: Implementa *Generación Aumentada por Recuperación* de forma nativa. El bot busca en tus archivos de Drive para dar respuestas precisas. Consulta aquí los [tipos de archivos soportados](https://ai.google.dev/gemini-api/docs/file-search#supported-files).
+2.  **Motor RAG avanzado**: Implementa *Generación Aumentada por Recuperación* de forma nativa. El bot busca en tus documentos para dar respuestas precisas basadas en tus fuentes. Consulta aquí los [tipos de archivos soportados](https://ai.google.dev/gemini-api/docs/file-search#supported-files).
 
-3.  **Gestor de conocimiento**: Un panel moderno para listar, revisar y eliminar los documentos que el bot ha indexado.
+3.  **Gestor de conocimiento integral**: Un panel moderno para consultar, añadir y eliminar documentos indexados en el almacén de Gemini. Permite subir múltiples archivos locales (con zona de *Drag & Drop* y mini-cola interactiva) o importar archivos directamente mediante enlace o ID de Google Drive.
     <p align="center">
-      <img src="assets/diálogo-gestionar.png" alt="Gestor de Conocimiento" width="500">
+      <img src="assets/diálogo-gestionar.png" alt="Gestor de conocimiento" width="500">
     </p>
 
-4.  **Sincronización inteligente**: Proceso de subida interactivo con feedback en tiempo real y desplazamiento automático.
+4.  **Sincronización inteligente (*Smart Sync*)**: Cotejo automático entre la fecha de modificación en Google Drive y la fecha de indexación en Gemini. Clasifica los documentos en *Nuevos*, *Modificados* y *Al día*, ofrece enlaces directos para abrirlos en Drive, actualiza de forma limpia los modificados y evita duplicados innecesarios.
     <p align="center">
-      <img src="assets/diálogo-sincronizar.png" alt="Proceso de Sincronización" width="500">
+      <img src="assets/diálogo-sincronizar.png" alt="Sincronización de conocimiento" width="500">
     </p>
 
 5.  **Interfaz web moderna**: Una WebApp tipo "Chat" responsive, con soporte para Markdown.
@@ -68,7 +68,7 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
       <img src="assets/diálogo-asistente-despliegue.png" alt="Asistente de Despliegue de SheetsBot" width="500">
     </p>
 
-7.  **Arquitectura robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos.
+7.  **Arquitectura robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos y garantizar alta disponibilidad ante picos de uso.
 
 ---
 
@@ -93,8 +93,8 @@ Si partes de una hoja en blanco con el código instalado, puedes inicializarla d
     *   **API_KEY**: Obtén tu clave en [Google AI Studio](https://aistudio.google.com/api-keys).
     *   **MODELO**: Elige el modelo (ej: `gemini-flash-lite-latest`). Puedes consultar la lista completa de [modelos y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations) en la documentación oficial o usar este [dashboard de modelos de Gemini](https://pfelipm.github.io/gemini-models/) para una comparativa visual y actualizada.
     *   **THINKING_LEVEL**: Define el nivel de razonamiento (ej: `low`). Para la mayoría de casos de uso, optimizar la velocidad de respuesta y **exprimir al máximo el nivel gratuito de la API**, se recomienda utilizar el modelo `gemini-flash-lite-latest` con un nivel `low`.
-    *   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos de Drive.
-    *   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta donde guardas tus documentos de conocimiento.
+    *   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos de conocimiento. Si está desactivado, el bot responderá utilizando exclusivamente el conocimiento general del modelo.
+    *   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta de Google Drive si deseas sincronizar documentos en lote. *(Opcional si prefieres añadir archivos individuales desde el Gestor de conocimiento)*.
     *   **Conocimiento**: El chatbot "sabe" todo lo que el modelo de Gemini seleccionado conoce de forma nativa. Al activar el **modo RAG**, este conocimiento se enriquece con tus propios contenidos. En este sentido, SheetsBot se comporta de forma similar a una **Gema de Gemini** a la que se le han facilitado archivos en su definición, más que a una aplicación de RAG estricto como NotebookLM.
 *   **Ajustes de aspecto**:
     *   **CHAT_TITULO**: Personaliza el nombre que aparece en la cabecera del chat.
@@ -113,10 +113,17 @@ Si partes de una hoja en blanco con el código instalado, puedes inicializarla d
 > 2. Si la política de tu cuenta lo permite, probar a asociar una cuenta de facturación al proyecto de GCP.
 > 3. Como alternativa experimental, intentar generar una clave mediante cuenta de servicio: [ver notas en el apéndice](#-apéndice-posible-alternativa-para-proyectos-restringidos-o-error-403).
 
-#### 3. Carga de conocimiento
-*   Si usas el modo RAG, selecciona **🤖 SheetsBot > 🔄 Sincronizar Conocimiento**.
-*   Podrás elegir entre **Añadir nuevos** archivos o realizar una **Limpieza total**.
-*   Verás en tiempo real cómo se procesa cada documento.
+#### 3. Carga y gestión de conocimiento (RAG)
+Dispones de dos métodos complementarios para nutrir la base de conocimiento de tu chatbot:
+
+*   **Vía A: Sincronización inteligente de carpeta (`🤖 SheetsBot > 🔄 Sincronizar conocimiento`)**:
+    *   Escanea la carpeta de Google Drive indicada en la configuración y compara las fechas de modificación con los documentos ya existentes en Gemini.
+    *   Permite sincronizar solo los cambios (subir nuevos y actualizar modificados con reemplazo limpio) o realizar una limpieza y sincronización total.
+    *   Incluye enlaces directos para abrir e inspeccionar cualquier archivo en Drive antes de sincronizar.
+
+*   **Vía B: Subida individual o por lotes (`🤖 SheetsBot > ⚙️ Gestionar conocimiento`)**:
+    *   Pulsa **`[+ Añadir documento]`** para subir uno o varios archivos directamente desde tu ordenador (PDF, Word, Markdown, texto plano, hojas de cálculo, imágenes...) con cola de subida interactiva.
+    *   O pega directamente el enlace / ID de cualquier archivo individual de Google Drive (los Google Docs y Sheets se convierten automáticamente a PDF para la API).
 
 > ℹ️ **Límite de tamaño de archivo (UrlFetchApp):**
 > Google Apps Script impone un límite máximo de **50 MB por petición HTTP** a través del servicio `UrlFetchApp`. Esto afecta a la subida individual de documentos desde Drive al almacén de Gemini: cualquier archivo individual (o documento de Google Docs/Sheets cuya conversión automática a PDF supere los 50 MB) fallará al sincronizarse. Se recomienda utilizar documentos optimizados por debajo de este límite.
@@ -133,7 +140,10 @@ Una vez desplegada, introduce la URL en el **Asistente de Despliegue** para guar
 ### ⚙️ Gestión y auditoría
 
 #### Gestor de conocimiento
-A través del panel de gestión, puedes revisar el estado de indexación de cada archivo y realizar limpiezas selectivas o totales.
+A través del panel de gestión (**🤖 SheetsBot > ⚙️ Gestionar conocimiento**), puedes:
+*   Revisar el listado completo de documentos indexados con su fecha de subida.
+*   Añadir nuevos documentos locales o enlaces de Drive en cualquier momento.
+*   Eliminar de forma selectiva documentos obsoletos (con botón reactivo) o purgar el almacén al completo.
 
 #### Pestaña de Log
 Cada interacción queda registrada automáticamente en la pestaña **Log**, incluyendo:
@@ -156,8 +166,8 @@ Cada interacción queda registrada automáticamente en la pestaña **Log**, incl
 *   **💬 Abrir chatbot**: Abre la WebApp en una nueva pestaña (o abre el asistente si aún no se ha guardado la URL).
 *   **🚀 Desplegar WebApp**: Asistente guiado paso a paso para desplegar la WebApp, registrar la URL y generar códigos QR de acceso.
 *   **✨ Inicializar hoja**: Prepara la estructura y validaciones de la hoja de cálculo (opcional si usas la plantilla).
-*   **🔄 Sincronizar conocimiento**: Sube los archivos de Drive al motor de Gemini.
-*   **⚙️ Gestionar conocimiento**: Panel de control de archivos indexados.
+*   **🔄 Sincronizar conocimiento**: Sincronización inteligente de la carpeta de Drive con detección de cambios y actualización limpia.
+*   **⚙️ Gestionar conocimiento**: Panel de control integral para listar, añadir (archivos locales o Drive) y eliminar documentos.
 *   **ℹ️ Acerca de**: Información de autoría, licencia y versión.
 
 ---
