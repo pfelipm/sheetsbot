@@ -314,12 +314,14 @@ function openChatbot() {
  * Abre el Asistente de Despliegue de la WebApp.
  */
 function showDeployWizard() {
+  const config = getConfig();
   const template = HtmlService.createTemplateFromFile('deployWizard');
   template.currentUrl = getSavedWebAppUrl() || '';
+  template.chatTitle = config.CHAT_TITULO || '🤖 SheetsBot';
   template.editorUrl = 'https://script.google.com/home/projects/' + ScriptApp.getScriptId() + '/edit';
   const html = template.evaluate()
       .setWidth(600)
-      .setHeight(680);
+      .setHeight(570);
   SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }
 
