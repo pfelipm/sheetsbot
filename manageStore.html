@@ -494,7 +494,25 @@
         container.innerHTML = html;
         footer.style.display = 'flex';
         footer.style.opacity = '1';
-        footer.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
+        
+        // Re-habilitar eliminar store y conectar checkboxes
+        const btnStore = footer.querySelector('.red.darken-2');
+        if (btnStore) btnStore.disabled = false;
+
+        document.querySelectorAll('.doc-check').forEach(cb => {
+          cb.addEventListener('change', updateSelectionState);
+        });
+        updateSelectionState();
+      }
+
+      function updateSelectionState() {
+        const selectedCount = document.querySelectorAll('.doc-check:checked').length;
+        const btnDel = document.getElementById('btn-del-sel');
+        if (btnDel) {
+          btnDel.disabled = (selectedCount === 0);
+          btnDel.style.opacity = (selectedCount === 0) ? '0.45' : '1';
+          btnDel.style.cursor = (selectedCount === 0) ? 'not-allowed' : 'pointer';
+        }
       }
 
       function toggleUploadPanel(forceState) {
@@ -639,10 +657,12 @@
 
       function selectAll(val) {
         document.querySelectorAll('.doc-check').forEach(cb => cb.checked = val);
+        updateSelectionState();
       }
 
       function invertSelection() {
         document.querySelectorAll('.doc-check').forEach(cb => cb.checked = !cb.checked);
+        updateSelectionState();
       }
 
       async function handleDeleteSelected() {

@@ -64,7 +64,8 @@ function prepareStore(mode) {
 }
 
 /**
- * Obtiene la lista de archivos a sincronizar. Llamada desde el modal.
+ * Obtiene la lista de archivos a sincronizar, comparando fechas con el almacén de Gemini.
+ * Llamada desde el modal de progreso.
  */
 function getFilesToSync() {
   const config = getConfig();
@@ -73,6 +74,18 @@ function getFilesToSync() {
   const files = folder.getFiles();
   const fileList = [];
   
+  // Obtener documentos existentes en el store para comparar
+  const existingDocs = getStoreDocuments();
+  const existingMap = {};
+  existingDocs.forEach(d => {
+    if (d.displayName) {
+      existingMap[d.displayName.toLowerCase()] = {
+        name: d.name,
+        createTime: d.createTime ? new Date(d.createTime).getTime() : 0
+      };
+    }
+  });
+
   const supportedTypes = [
     'application/pdf',
     'application/vnd.google-apps.document',
@@ -86,7 +99,30 @@ function getFilesToSync() {
     const file = files.next();
     const mimeType = file.getMimeType();
     if (supportedTypes.indexOf(mimeType) !== -1 || mimeType.startsWith('image/') || mimeType.startsWith('text/')) {
-      fileList.push({ id: file.getId(), name: file.getName() });
+      const fileName = file.getName();
+      const lastUpdated = file.getLastUpdated() ? file.getLastUpdated().getTime() : 0;
+      const key = fileName.toLowerCase();
+      
+      let syncStatus = 'NEW';
+      let geminiDocName = '';
+      
+      if (existingMap[key]) {
+        geminiDocName = existingMap[key].name;
+        // Si la última modificación en Drive es posterior a la subida en Gemini (con margen de 2 segundos)
+        if (lastUpdated > existingMap[key].createTime + 2000) {
+          syncStatus = 'MODIFIED';
+        } else {
+          syncStatus = 'UP_TO_DATE';
+        }
+      }
+
+      fileList.push({ 
+        id: file.getId(), 
+        name: fileName,
+        status: syncStatus,
+        geminiDocName: geminiDocName,
+        lastUpdatedText: file.getLastUpdated() ? file.getLastUpdated().toLocaleString() : ''
+      });
     }
   }
   
@@ -94,9 +130,11 @@ function getFilesToSync() {
 }
 
 /**
- * Sube un archivo individual de Drive por su ID. Llamada desde el modal de progreso.
+ * Sube un archivo individual de Drive por su ID.
+ * Si se indica replaceDocName, borra la versión antigua en Gemini antes de subir.
+ * Llamada desde el modal de progreso.
  */
-function uploadFileById(fileId) {
+function uploadFileById(fileId, replaceDocName) {
   try {
     const config = getConfig();
     const apiKey = config.API_KEY;
@@ -106,6 +144,15 @@ function uploadFileById(fileId) {
     if (!storeName) {
       storeName = createFileSearchStore(apiKey);
       setConfigValue('ID_STORE_GEMINI', storeName);
+    }
+
+    // Si es una actualización, eliminar documento antiguo primero
+    if (replaceDocName) {
+      try {
+        deleteDocumentByName(replaceDocName);
+      } catch (delErr) {
+        console.warn('No se pudo borrar documento antiguo antes de reemplazar: ' + delErr.message);
+      }
     }
 
     const file = DriveApp.getFileById(fileId);
