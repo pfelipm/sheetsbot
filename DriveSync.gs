@@ -238,7 +238,7 @@ function showStoreManager() {
   const ui = SpreadsheetApp.getUi();
   const html = HtmlService.createHtmlOutputFromFile('manageStore')
     .setWidth(620)
-    .setHeight(560);
+    .setHeight(620);
   ui.showModalDialog(html, ' ');
 }
 
