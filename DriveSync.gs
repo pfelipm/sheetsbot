@@ -275,13 +275,13 @@ const VERSION = 'v1.1 (agosto 2026)';
 function onOpen() {
   const ui = SpreadsheetApp.getUi();
   ui.createMenu('🤖 SheetsBot')
-      .addItem('💬 Abrir Chatbot', 'openChatbot')
+      .addItem('💬 Abrir chatbot', 'openChatbot')
       .addItem('🚀 Desplegar WebApp', 'showDeployWizard')
       .addSeparator()
-      .addItem('✨ Inicializar Hoja', 'setupSheet')
+      .addItem('✨ Inicializar hoja', 'setupSheet')
       .addSeparator()
-      .addItem('🔄 Sincronizar Conocimiento', 'syncKnowledgeBase')
-      .addItem('⚙️ Gestionar Conocimiento', 'showStoreManager')
+      .addItem('🔄 Sincronizar conocimiento', 'syncKnowledgeBase')
+      .addItem('⚙️ Gestionar conocimiento', 'showStoreManager')
       .addSeparator()
       .addItem('ℹ️ Acerca de', 'showAbout')
       .addToUi();
@@ -372,7 +372,7 @@ function openChatbot() {
             <div style="display: flex; justify-content: center; gap: 8px;">
               <a href="${url}" target="_blank" class="btn waves-effect waves-light btn-primary" onclick="setTimeout(function(){ google.script.host.close(); }, 250)">
                 <i class="material-icons left" style="font-size: 18px; margin-right: 4px;">open_in_new</i>
-                Abrir Chatbot
+                Abrir chatbot
               </a>
               <button class="btn waves-effect waves-light btn-grey" onclick="copyUrl()">
                 <i class="material-icons left" style="font-size: 18px; margin-right: 4px;">content_copy</i>
