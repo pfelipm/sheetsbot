@@ -187,7 +187,7 @@ Si tienes sugerencias o encuentras errores, por favor abre un *issue* o envía u
 *   **Repositorio:** [https://github.com/pfelipm/sheetsbot](https://github.com/pfelipm/sheetsbot)
 
 ---
-<p align="center">Hecho con ❤️, café y la inestimable ayuda estratégica de Gemini CLI.</p>
+<p align="center">Hecho con ❤️, café y la inestimable ayuda estratégica de Gemini CLI y Antigravity CLI.</p>
 
 ---
 
