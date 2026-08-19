@@ -316,12 +316,14 @@ function openChatbot() {
 function showDeployWizard() {
   const config = getConfig();
   const template = HtmlService.createTemplateFromFile('deployWizard');
-  template.currentUrl = getSavedWebAppUrl() || '';
+  const savedUrl = getSavedWebAppUrl() || '';
+  template.currentUrl = savedUrl;
   template.chatTitle = config.CHAT_TITULO || '🤖 SheetsBot';
   template.editorUrl = 'https://script.google.com/home/projects/' + ScriptApp.getScriptId() + '/edit';
+  const initialHeight = savedUrl ? 870 : 520;
   const html = template.evaluate()
       .setWidth(600)
-      .setHeight(870);
+      .setHeight(initialHeight);
   SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }
 

@@ -370,8 +370,10 @@
               if (res.url) {
                 activeSection.style.display = 'block';
                 document.getElementById('qr-code-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(res.url);
+                google.script.host.setHeight(870);
               } else {
                 activeSection.style.display = 'none';
+                google.script.host.setHeight(520);
               }
             } else {
               M.toast({html: '❌ ' + res.error, classes: 'red darken-2'});
