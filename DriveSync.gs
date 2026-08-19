@@ -13,8 +13,22 @@ function syncKnowledgeBase() {
   const apiKey = config.API_KEY;
   const folderId = config.ID_CARPETA_DRIVE;
   
-  if (!apiKey) throw new Error('Configura la API_KEY primero.');
-  if (!folderId) throw new Error('Configura el ID_CARPETA_DRIVE primero.');
+  if (!apiKey) {
+    ui.alert(
+      'API Key no configurada',
+      'Por favor, introduce tu API Key de Gemini en la pestaña «Configuración» antes de sincronizar.',
+      ui.ButtonSet.OK
+    );
+    return;
+  }
+  if (!folderId) {
+    ui.alert(
+      'Carpeta de Drive no configurada',
+      'Para sincronizar una carpeta completa de Drive debes indicar su ID en la pestaña «Configuración».\n\n💡 Si deseas añadir documentos individuales (desde tu equipo o mediante enlace de Drive), puedes hacerlo desde el menú:\n🤖 SheetsBot > ⚙️ Gestionar conocimiento.',
+      ui.ButtonSet.OK
+    );
+    return;
+  }
 
   // Abrir el diálogo de progreso con más altura
   const html = HtmlService.createHtmlOutputFromFile('syncProgress')
@@ -80,7 +94,7 @@ function getFilesToSync() {
 }
 
 /**
- * Sube un archivo individual por su ID. Llamada desde el modal.
+ * Sube un archivo individual de Drive por su ID. Llamada desde el modal de progreso.
  */
 function uploadFileById(fileId) {
   try {
@@ -104,13 +118,79 @@ function uploadFileById(fileId) {
 }
 
 /**
+ * Sube un archivo individual proporcionado mediante enlace o ID de Drive.
+ * Llamada desde el Gestor de Conocimiento.
+ */
+function uploadDriveFileByUrlOrId(urlOrId) {
+  try {
+    const config = getConfig();
+    const apiKey = config.API_KEY;
+    if (!apiKey) throw new Error('Configura la API_KEY primero en la hoja de Configuración.');
+    
+    let raw = (urlOrId || '').trim();
+    if (!raw) throw new Error('Introduce un enlace o ID de archivo válido.');
+    
+    // Extraer ID si es URL completa de Drive o cadena de ID
+    let fileId = raw;
+    const match = raw.match(/[-\w]{25,}/);
+    if (match) {
+      fileId = match[0];
+    }
+    
+    let storeName = config.ID_STORE_GEMINI;
+    if (!storeName) {
+      storeName = createFileSearchStore(apiKey);
+      setConfigValue('ID_STORE_GEMINI', storeName);
+    }
+    
+    const file = DriveApp.getFileById(fileId);
+    uploadFileToGeminiStore(file, storeName, apiKey);
+    return { success: true, fileName: file.getName() };
+  } catch (e) {
+    console.error('Error subiendo archivo de Drive: ' + e.message);
+    return { success: false, error: e.message };
+  }
+}
+
+/**
+ * Sube un archivo local enviado en Base64 desde el navegador.
+ * Llamada desde el Gestor de Conocimiento.
+ */
+function uploadLocalFile(fileData) {
+  try {
+    const config = getConfig();
+    const apiKey = config.API_KEY;
+    if (!apiKey) throw new Error('Configura la API_KEY primero en la hoja de Configuración.');
+    
+    if (!fileData || !fileData.base64) {
+      throw new Error('No se han recibido datos de archivo válidos.');
+    }
+    
+    let storeName = config.ID_STORE_GEMINI;
+    if (!storeName) {
+      storeName = createFileSearchStore(apiKey);
+      setConfigValue('ID_STORE_GEMINI', storeName);
+    }
+    
+    const decodedBytes = Utilities.base64Decode(fileData.base64);
+    const blob = Utilities.newBlob(decodedBytes, fileData.type || 'application/octet-stream', fileData.name);
+    
+    uploadBlobToGeminiStore(blob, fileData.name, storeName, apiKey);
+    return { success: true, fileName: fileData.name };
+  } catch (e) {
+    console.error('Error subiendo archivo local: ' + e.message);
+    return { success: false, error: e.message };
+  }
+}
+
+/**
  * Abre el modal de gestión del conocimiento.
  */
 function showStoreManager() {
   const ui = SpreadsheetApp.getUi();
   const html = HtmlService.createHtmlOutputFromFile('manageStore')
-    .setWidth(600)
-    .setHeight(550);
+    .setWidth(620)
+    .setHeight(580);
   ui.showModalDialog(html, ' ');
 }
 
@@ -224,7 +304,13 @@ function uploadFileToGeminiStore(file, storeName, apiKey) {
     blob = file.getBlob();
   }
 
-  // Usar multipart upload para enviar metadatos (nombre) y contenido
+  uploadBlobToGeminiStore(blob, fileName, storeName, apiKey);
+}
+
+/**
+ * Sube cualquier Blob al Store de Gemini usando multipart upload.
+ */
+function uploadBlobToGeminiStore(blob, fileName, storeName, apiKey) {
   const url = `https://generativelanguage.googleapis.com/upload/v1beta/${storeName}:uploadToFileSearchStore?uploadType=multipart&key=${apiKey}`;
   
   const boundary = "-------" + Utilities.getUuid();
@@ -237,7 +323,7 @@ function uploadFileToGeminiStore(file, storeName, apiKey) {
                  "Content-Type: application/json; charset=UTF-8\r\n\r\n" +
                  metadata + "\r\n" +
                  "--" + boundary + "\r\n" +
-                 "Content-Type: " + blob.getContentType() + "\r\n\r\n";
+                 "Content-Type: " + (blob.getContentType() || "application/octet-stream") + "\r\n\r\n";
   
   const footer = "\r\n--" + boundary + "--\r\n";
 

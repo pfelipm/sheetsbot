@@ -17,21 +17,22 @@
       }
       .header-container {
         background-color: #1a73e8;
-        padding: 15px;
+        padding: 14px 18px;
         color: white;
         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         display: flex;
         align-items: center;
         gap: 10px;
       }
-      .header-container i { font-size: 24px; }
-      .header-container span { font-size: 18px; font-weight: 500; }
+      .header-container i { font-size: 22px; }
+      .header-container span { font-size: 17px; font-weight: 500; }
       
       #main-wrapper {
-        padding: 20px;
-        height: calc(100vh - 54px);
+        padding: 16px 20px;
+        height: calc(100vh - 50px);
         display: flex;
         flex-direction: column;
+        box-sizing: border-box;
       }
 
       .content-card {
@@ -42,17 +43,106 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        margin-bottom: 15px;
+        margin-bottom: 12px;
       }
 
-      .controls { 
-        padding: 15px; 
-        display: flex; 
-        gap: 10px; 
+      .top-bar {
+        padding: 10px 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         border-bottom: 1px solid #eee;
         background: #fafafa;
+        flex-wrap: wrap;
+        gap: 8px;
       }
-      
+
+      .btn-add-doc {
+        background-color: #1a73e8 !important;
+        color: white !important;
+        text-transform: none !important;
+        font-weight: 500;
+        border-radius: 4px;
+        height: 32px;
+        line-height: 32px;
+        padding: 0 12px;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+      }
+      .btn-add-doc:hover { background-color: #1557b0 !important; }
+
+      /* Panel de subida desplegable */
+      #upload-panel {
+        display: none;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 14px 18px;
+        animation: fadeIn 0.2s ease;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-6px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .upload-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 6px;
+      }
+      .upload-tab-btn {
+        background: none;
+        border: none;
+        padding: 6px 12px;
+        font-size: 13px;
+        font-weight: 500;
+        color: #5f6368;
+        cursor: pointer;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .upload-tab-btn.active {
+        color: #1a73e8;
+        background-color: #e8f0fe;
+      }
+
+      .drop-zone {
+        border: 2px dashed #dadce0;
+        border-radius: 6px;
+        padding: 16px;
+        text-align: center;
+        background: #ffffff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .drop-zone:hover, .drop-zone.dragover {
+        border-color: #1a73e8;
+        background: #f1f7fe;
+      }
+
+      .drive-url-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .drive-url-row input {
+        background: white !important;
+        border: 1px solid #dadce0 !important;
+        border-radius: 4px !important;
+        padding: 0 10px !important;
+        height: 36px !important;
+        box-sizing: border-box !important;
+        font-size: 13px !important;
+        margin: 0 !important;
+        flex: 1;
+      }
+
       .table-container { 
         flex: 1;
         overflow-y: auto;
@@ -69,13 +159,13 @@
         z-index: 1;
         color: #5f6368;
         font-weight: 600;
-        font-size: 13px;
+        font-size: 12.5px;
         text-transform: uppercase;
       }
       
       td { 
-        font-size: 14px; 
-        padding: 12px 10px; 
+        font-size: 13.5px; 
+        padding: 10px 10px; 
         vertical-align: middle !important; 
       }
       
@@ -104,7 +194,7 @@
         background: white; padding: 24px; border-radius: 8px; width: 85%; max-width: 400px;
         box-shadow: 0 8px 24px rgba(0,0,0,0.2);
       }
-      #dialog-msg { margin-bottom: 24px; line-height: 1.5; font-size: 15px; color: #3c4043; }
+      #dialog-msg { margin-bottom: 24px; line-height: 1.5; font-size: 14.5px; color: #3c4043; }
       .dialog-btns { display: flex; gap: 12px; justify-content: flex-end; }
       
       .loading-container {
@@ -117,18 +207,19 @@
       }
 
       .btn-small-flat {
-        padding: 0 8px;
+        padding: 0 6px;
         font-size: 12px;
-        height: 28px;
-        line-height: 28px;
+        height: 26px;
+        line-height: 26px;
         text-transform: none;
       }
       
       .blue-text-theme { color: #1a73e8 !important; }
       .btn-theme { background-color: #1a73e8 !important; }
+      
       /* Miniature spinner */
       .mini-spinner {
-        width: 18px; height: 18px;
+        width: 16px; height: 16px;
         border: 2px solid #e3f2fd;
         border-top: 2px solid #1a73e8;
         border-radius: 50%;
@@ -157,6 +248,21 @@
         border-color: #d32f2f !important;
       }
 
+      .btn-primary-action {
+        background-color: #1a73e8 !important;
+        color: white !important;
+        text-transform: none !important;
+        font-weight: 500;
+        border-radius: 4px;
+        height: 36px;
+        line-height: 36px;
+        padding: 0 14px;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
       .row-working { background-color: #e8f0fe !important; }
       .row-success { color: #2e7d32; opacity: 0.6; }
       .row-error { color: #d32f2f; }
@@ -177,7 +283,84 @@
     
     <div id="main-wrapper">
       <div class="content-card">
-        <div id="content" style="height: 100%;">
+        
+        <!-- Barra superior con botón añadir y filtros -->
+        <div class="top-bar">
+          <button class="btn waves-effect waves-light btn-add-doc" onclick="toggleUploadPanel()" id="btn-toggle-upload">
+            <i class="material-icons" style="font-size: 18px;">add</i>Añadir documento
+          </button>
+          
+          <div id="selection-controls" style="display: none; align-items: center; gap: 4px;">
+            <button class="btn-flat btn-small-flat waves-effect waves-blue blue-text" onclick="selectAll(true)">Seleccionar todos</button>
+            <span style="color: #ccc;">|</span>
+            <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="selectAll(false)">Ninguno</button>
+            <span style="color: #ccc;">|</span>
+            <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="invertSelection()">Invertir</button>
+          </div>
+        </div>
+
+        <!-- Panel de subida desplegable -->
+        <div id="upload-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div class="upload-tabs">
+              <button class="upload-tab-btn active" id="tab-btn-local" onclick="switchUploadTab('local')">
+                <i class="material-icons" style="font-size: 16px;">computer</i>Archivo local
+              </button>
+              <button class="upload-tab-btn" id="tab-btn-drive" onclick="switchUploadTab('drive')">
+                <i class="material-icons" style="font-size: 16px;">cloud</i>Enlace de Google Drive
+              </button>
+            </div>
+            <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="toggleUploadPanel(false)" title="Cerrar panel">
+              <i class="material-icons" style="font-size: 18px;">close</i>
+            </button>
+          </div>
+
+          <!-- Pestaña 1: Archivo local -->
+          <div id="tab-content-local">
+            <input type="file" id="local-file-picker" style="display: none;" onchange="handleFileChosen(event)" accept=".pdf,.docx,.doc,.txt,.csv,.md,.json,.xlsx,.xls,.png,.jpg,.jpeg,.webp">
+            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('local-file-picker').click()">
+              <i class="material-icons blue-text" style="font-size: 32px; margin-bottom: 4px;">upload_file</i>
+              <div style="font-size: 13px; font-weight: 500; color: #202124;">
+                Arrastra un archivo aquí o haz clic para examinar
+              </div>
+              <div style="font-size: 11px; color: #70757a; margin-top: 2px;">
+                PDF, Docs, Sheets, TXT, DOCX, Markdown, imágenes...
+              </div>
+            </div>
+            <div id="selected-file-info" style="display: none; align-items: center; justify-content: space-between; margin-top: 10px; background: white; padding: 8px 12px; border-radius: 4px; border: 1px solid #dadce0;">
+              <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                <i class="material-icons blue-text" style="font-size: 20px;">description</i>
+                <span id="selected-file-name" style="font-size: 13px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"></span>
+                <span id="selected-file-size" style="font-size: 11.5px; color: #70757a;"></span>
+              </div>
+              <button class="btn waves-effect waves-light btn-primary-action" id="btn-upload-local" onclick="uploadLocalFileSelected()">
+                <i class="material-icons left" style="font-size: 16px; margin-right: 4px;">cloud_upload</i>Subir
+              </button>
+            </div>
+          </div>
+
+          <!-- Pestaña 2: Enlace de Google Drive -->
+          <div id="tab-content-drive" style="display: none;">
+            <div style="font-size: 12px; color: #5f6368; margin-bottom: 6px;">
+              Pega el enlace de compartir o el ID de cualquier archivo de Drive (Docs, Sheets, PDF...):
+            </div>
+            <div class="drive-url-row">
+              <input type="text" id="drive-url-input" placeholder="https://drive.google.com/file/d/1abc.../view o ID de archivo" onkeydown="if(event.key==='Enter') uploadDriveFileSubmitted()">
+              <button class="btn waves-effect waves-light btn-primary-action" id="btn-upload-drive" onclick="uploadDriveFileSubmitted()">
+                <i class="material-icons left" style="font-size: 16px; margin-right: 4px;">add_link</i>Añadir
+              </button>
+            </div>
+          </div>
+
+          <!-- Barra de progreso de subida -->
+          <div id="upload-progress-box" style="display: none; align-items: center; gap: 10px; margin-top: 10px; background: #e8f0fe; padding: 8px 12px; border-radius: 4px; color: #1a73e8; font-size: 13px;">
+            <div class="mini-spinner"></div>
+            <span id="upload-progress-text">Procesando e indexando documento en Gemini...</span>
+          </div>
+        </div>
+
+        <!-- Contenedor principal de la tabla o carga -->
+        <div id="content" style="height: 100%; display: flex; flex-direction: column;">
           <div class="loading-container">
             <div class="preloader-wrapper small active">
               <div class="spinner-layer spinner-blue-only">
@@ -204,8 +387,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
       let documents = [];
+      let currentChosenFile = null;
 
-      window.onload = loadDocuments;
+      window.onload = () => {
+        setupDragAndDrop();
+        loadDocuments();
+      };
 
       function customAlert(msg) {
         showDialog(msg, [{ label: 'Entendido', type: 'primary', callback: closeDialog }]);
@@ -256,24 +443,25 @@
         documents = data;
         const container = document.getElementById('content');
         const footer = document.getElementById('footer-container');
+        const selectionControls = document.getElementById('selection-controls');
         
         if (!documents || documents.length === 0) {
+          selectionControls.style.display = 'none';
           container.innerHTML = `
-            <div class="loading-container">
+            <div class="loading-container" style="padding: 30px 20px;">
               <i class="material-icons grey-text" style="font-size: 48px;">folder_open</i>
-              <p>El almacén está vacío o aún no se ha creado.</p>
+              <p style="margin-top: 10px; font-size: 14px;">El almacén está vacío o aún no se ha creado.</p>
+              <button class="btn waves-effect waves-light btn-add-doc" style="margin-top: 10px;" onclick="toggleUploadPanel(true)">
+                <i class="material-icons left" style="font-size: 18px;">add</i>Añadir tu primer documento
+              </button>
             </div>
           `;
           footer.style.display = 'none';
           return;
         }
 
+        selectionControls.style.display = 'flex';
         let html = `
-          <div class="controls">
-            <button class="btn-flat btn-small-flat waves-effect waves-blue blue-text" onclick="selectAll(true)">Seleccionar todos</button>
-            <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="selectAll(false)">Ninguno</button>
-            <button class="btn-flat btn-small-flat waves-effect waves-grey grey-text" onclick="invertSelection()">Invertir</button>
-          </div>
           <div class="table-container">
             <table class="highlight">
               <thead>
@@ -309,6 +497,146 @@
         footer.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
       }
 
+      function toggleUploadPanel(forceState) {
+        const panel = document.getElementById('upload-panel');
+        const isVisible = (panel.style.display === 'block');
+        const nextState = (typeof forceState === 'boolean') ? forceState : !isVisible;
+        panel.style.display = nextState ? 'block' : 'none';
+      }
+
+      function switchUploadTab(tab) {
+        document.getElementById('tab-btn-local').className = (tab === 'local') ? 'upload-tab-btn active' : 'upload-tab-btn';
+        document.getElementById('tab-btn-drive').className = (tab === 'drive') ? 'upload-tab-btn active' : 'upload-tab-btn';
+        document.getElementById('tab-content-local').style.display = (tab === 'local') ? 'block' : 'none';
+        document.getElementById('tab-content-drive').style.display = (tab === 'drive') ? 'block' : 'none';
+      }
+
+      function setupDragAndDrop() {
+        const dropZone = document.getElementById('drop-zone');
+        ['dragenter', 'dragover'].forEach(eventName => {
+          dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('dragover');
+          }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+          dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('dragover');
+          }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+          const files = e.dataTransfer.files;
+          if (files.length > 0) {
+            selectLocalFile(files[0]);
+          }
+        }, false);
+      }
+
+      function handleFileChosen(e) {
+        if (e.target.files && e.target.files.length > 0) {
+          selectLocalFile(e.target.files[0]);
+        }
+      }
+
+      function selectLocalFile(file) {
+        currentChosenFile = file;
+        document.getElementById('selected-file-name').textContent = file.name;
+        const sizeKb = (file.size / 1024).toFixed(1);
+        document.getElementById('selected-file-size').textContent = `(${sizeKb} KB)`;
+        document.getElementById('selected-file-info').style.display = 'flex';
+      }
+
+      function uploadLocalFileSelected() {
+        if (!currentChosenFile) return;
+        
+        // Comprobar límite de 50MB
+        if (currentChosenFile.size > 50 * 1024 * 1024) {
+          customAlert('El archivo supera el límite de 50 MB permitido por Google Apps Script.');
+          return;
+        }
+
+        setUploadLoading(true, `Subiendo ${currentChosenFile.name}...`);
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const base64Data = e.target.result.split(',')[1];
+          google.script.run
+            .withSuccessHandler((res) => {
+              setUploadLoading(false);
+              if (res.success) {
+                M.toast({html: `✅ Archivo "${res.fileName}" añadido al conocimiento`, classes: 'green darken-1'});
+                currentChosenFile = null;
+                document.getElementById('selected-file-info').style.display = 'none';
+                document.getElementById('local-file-picker').value = '';
+                toggleUploadPanel(false);
+                loadDocuments();
+              } else {
+                customAlert('Error al subir: ' + res.error);
+              }
+            })
+            .withFailureHandler((err) => {
+              setUploadLoading(false);
+              customAlert('Error crítico al subir: ' + err.message);
+            })
+            .uploadLocalFile({
+              name: currentChosenFile.name,
+              type: currentChosenFile.type,
+              base64: base64Data
+            });
+        };
+        reader.readAsDataURL(currentChosenFile);
+      }
+
+      function uploadDriveFileSubmitted() {
+        const input = document.getElementById('drive-url-input');
+        const val = input.value.trim();
+        if (!val) {
+          customAlert('Por favor, introduce un enlace o ID de archivo de Google Drive.');
+          return;
+        }
+
+        setUploadLoading(true, 'Obteniendo e indexando archivo desde Drive...');
+        google.script.run
+          .withSuccessHandler((res) => {
+            setUploadLoading(false);
+            if (res.success) {
+              M.toast({html: `✅ Archivo "${res.fileName}" añadido al conocimiento`, classes: 'green darken-1'});
+              input.value = '';
+              toggleUploadPanel(false);
+              loadDocuments();
+            } else {
+              customAlert('Error al importar desde Drive: ' + res.error);
+            }
+          })
+          .withFailureHandler((err) => {
+            setUploadLoading(false);
+            customAlert('Error crítico: ' + err.message);
+          })
+          .uploadDriveFileByUrlOrId(val);
+      }
+
+      function setUploadLoading(isLoading, text) {
+        const progressBox = document.getElementById('upload-progress-box');
+        const btnUploadLocal = document.getElementById('btn-upload-local');
+        const btnUploadDrive = document.getElementById('btn-upload-drive');
+        
+        if (isLoading) {
+          document.getElementById('upload-progress-text').textContent = text || 'Procesando archivo...';
+          progressBox.style.display = 'flex';
+          if (btnUploadLocal) btnUploadLocal.disabled = true;
+          if (btnUploadDrive) btnUploadDrive.disabled = true;
+        } else {
+          progressBox.style.display = 'none';
+          if (btnUploadLocal) btnUploadLocal.disabled = false;
+          if (btnUploadDrive) btnUploadDrive.disabled = false;
+        }
+      }
+
       function selectAll(val) {
         document.querySelectorAll('.doc-check').forEach(cb => cb.checked = val);
       }
@@ -328,8 +656,8 @@
           // Desactivar controles
           document.querySelectorAll('.btn, .btn-flat, .doc-check').forEach(el => el.disabled = true);
           document.querySelector('.footer-actions').style.opacity = '0.5';
-          const controls = document.querySelector('.controls');
-          if (controls) controls.style.opacity = '0.5';
+          const topBar = document.querySelector('.top-bar');
+          if (topBar) topBar.style.opacity = '0.5';
 
           let successCount = 0;
           let errorCount = 0;
@@ -364,6 +692,9 @@
           }
 
           M.toast({html: `Eliminación finalizada (${successCount} éxitos, ${errorCount} errores)`});
+          
+          const topBarReset = document.querySelector('.top-bar');
+          if (topBarReset) topBarReset.style.opacity = '1';
           
           // Recargar lista tras una pequeña espera
           setTimeout(loadDocuments, 1500);
@@ -412,6 +743,8 @@
           footer.style.opacity = '1';
           footer.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
         }
+        const topBar = document.querySelector('.top-bar');
+        if (topBar) topBar.style.opacity = '1';
         customAlert('<b>Error</b>: ' + err.message);
         loadDocuments();
       }
