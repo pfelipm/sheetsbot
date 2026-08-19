@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Versión-v1.0_(agosto_2026)-indigo" alt="Versión">
+  <img src="https://img.shields.io/badge/Versión-v1.1_(agosto_2026)-indigo" alt="Versión">
   <img src="https://img.shields.io/badge/Licencia-GPL_v3-blue" alt="Licencia">
 </p>
 
@@ -63,7 +63,12 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
       <img src="assets/chatbot.png" alt="Interfaz de Chat de SheetsBot" width="600">
     </p>
 
-6.  **Arquitectura robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos.
+6.  **Asistente de despliegue guiado**: Un diálogo interactivo que acompaña paso a paso en la publicación de la WebApp, guarda la URL de forma segura en las propiedades del script, genera accesos directos y códigos QR (con opción de ampliación en nueva pestaña para proyectar en aulas o reuniones).
+    <p align="center">
+      <img src="assets/asistente-despliegue.png" alt="Asistente de Despliegue de SheetsBot" width="500">
+    </p>
+
+7.  **Arquitectura robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos.
 
 ---
 
@@ -115,9 +120,11 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 > Google Apps Script impone un límite máximo de **50 MB por petición HTTP** a través del servicio `UrlFetchApp`. Esto afecta a la subida individual de documentos desde Drive al almacén de Gemini: cualquier archivo individual (o documento de Google Docs/Sheets cuya conversión automática a PDF supere los 50 MB) fallará al sincronizarse. Se recomienda utilizar documentos optimizados por debajo de este límite.
 
 #### 4. Despliegue de la webapp
-En el editor de Apps Script, ve a **Implementar > Nueva implementación**, selecciona **Aplicación web** y elige el tipo de acceso:
+Puedes realizar el despliegue de forma guiada desde el menú **🤖 SheetsBot > 🚀 Desplegar WebApp**, o manualmente desde el editor de Apps Script en **Implementar > Nueva implementación** (eligiendo **Aplicación web**):
 *   **Cualquiera**: Uso anónimo. Ideal para bots públicos. Los usuarios no necesitan iniciar sesión y se registrarán como "Usuario anónimo" en el Log.
 *   **Usuarios con cuenta del dominio (Google Workspace)**: El uso del chatbot requiere inicio de sesión y permite capturar la identidad (email) del usuario en cada interacción para su registro en el Log. *Nota: Si seleccionas "Cualquier persona con una cuenta de Google", se exigirá inicio de sesión pero el script no podrá capturar el email del usuario por limitaciones de privacidad de Google.*
+
+Una vez desplegada, introduce la URL en el **Asistente de Despliegue** para guardarla de forma segura, disponer de acceso directo desde la hoja y generar el código QR.
 
 ---
 
