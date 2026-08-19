@@ -47,6 +47,9 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
     </p>
 
 2.  **Motor RAG avanzado**: Implementa *Generación Aumentada por Recuperación* de forma nativa. El bot busca en tus documentos para dar respuestas precisas basadas en tus fuentes. Consulta aquí los [tipos de archivos soportados](https://ai.google.dev/gemini-api/docs/file-search#supported-files).
+    <p align="center">
+      <img src="assets/chatbot-usa-rag.png" alt="Ejemplo de respuesta utilizando conocimiento RAG" width="600">
+    </p>
 
 3.  **Gestor de conocimiento integral**: Un panel moderno para consultar, añadir y eliminar documentos indexados en el almacén de Gemini. Permite subir múltiples archivos locales (con zona de *Drag & Drop* y mini-cola interactiva) o importar archivos directamente mediante enlace o ID de Google Drive.
     <p align="center">
