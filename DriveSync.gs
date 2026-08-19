@@ -111,7 +111,7 @@ function showStoreManager() {
   const html = HtmlService.createHtmlOutputFromFile('manageStore')
     .setWidth(600)
     .setHeight(550);
-  ui.showModalDialog(html, 'SheetsBot - Gestor de Conocimiento');
+  ui.showModalDialog(html, ' ');
 }
 
 /**
