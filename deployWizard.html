@@ -206,11 +206,11 @@
       }
 
       .qr-img-mini {
-        width: 48px;
-        height: 48px;
+        width: 80px;
+        height: 80px;
         border-radius: 4px;
         background: white;
-        padding: 2px;
+        padding: 3px;
         box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         flex-shrink: 0;
       }
@@ -321,16 +321,16 @@
               Copiar enlace
             </button>
             <button class="btn waves-effect waves-light btn-purple" onclick="projectQr()">
-              <i class="material-icons left" style="font-size: 16px; margin-right: 3px;">fullscreen</i>
-              Proyectar QR
+              <i class="material-icons left" style="font-size: 16px; margin-right: 3px;">open_in_new</i>
+              Ampliar QR
             </button>
           </div>
 
-          <div class="qr-flex-compact" onclick="projectQr()" title="Haz clic para proyectar a pantalla completa">
-            <img id="qr-code-img" class="qr-img-mini" src="<?= currentUrl ? 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(currentUrl) : '' ?>" alt="Código QR">
-            <div style="font-size: 11.5px; color: #5f6368; line-height: 1.35;">
-              <b style="color: #202124;">Acceso directo móvil / Proyección:</b><br>
-              Haz clic aquí o en <b>«Proyectar QR»</b> para abrir el código a pantalla completa para el aula o reuniones.
+          <div class="qr-flex-compact" onclick="projectQr()" title="Haz clic para abrir el código en una nueva pestaña">
+            <img id="qr-code-img" class="qr-img-mini" src="<?= currentUrl ? 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(currentUrl) : '' ?>" alt="Código QR">
+            <div style="font-size: 11.5px; color: #5f6368; line-height: 1.4;">
+              <b style="color: #202124;">Acceso directo móvil / Compartir:</b><br>
+              Escanea directamente este código con tu teléfono o pulsa <b>«Ampliar QR»</b> para abrirlo en una nueva pestaña y proyectarlo en grande.
             </div>
           </div>
         </div>
