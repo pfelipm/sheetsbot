@@ -147,6 +147,10 @@ Cada interacción queda registrada automáticamente en la pestaña **Log**, incl
 
 ### 🛠️ Comandos del menú
 
+<p align="center">
+  <img src="assets/menú.png" alt="Menú de SheetsBot en Google Sheets" width="400">
+</p>
+
 *   **💬 Abrir Chatbot**: Abre la WebApp en una nueva pestaña (o abre el asistente si aún no se ha guardado la URL).
 *   **🚀 Desplegar WebApp**: Asistente guiado paso a paso para desplegar la WebApp, registrar la URL y generar códigos QR de acceso.
 *   **✨ Inicializar Hoja**: Prepara la estructura y validaciones de la hoja de cálculo (opcional si usas la plantilla).
