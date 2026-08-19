@@ -320,7 +320,7 @@ function showDeployWizard() {
   template.currentUrl = savedUrl;
   template.chatTitle = config.CHAT_TITULO || '🤖 SheetsBot';
   template.editorUrl = 'https://script.google.com/home/projects/' + ScriptApp.getScriptId() + '/edit';
-  const initialHeight = savedUrl ? 870 : 520;
+  const initialHeight = savedUrl ? 870 : 570;
   const html = template.evaluate()
       .setWidth(600)
       .setHeight(initialHeight);
