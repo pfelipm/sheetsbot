@@ -321,7 +321,7 @@ function showDeployWizard() {
   template.editorUrl = 'https://script.google.com/home/projects/' + ScriptApp.getScriptId() + '/edit';
   const html = template.evaluate()
       .setWidth(600)
-      .setHeight(850);
+      .setHeight(870);
   SpreadsheetApp.getUi().showModalDialog(html, ' ');
 }
 
