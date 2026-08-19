@@ -95,16 +95,16 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
     *   **CHAT_COLOR_PRINCIPAL**: Define el color de acento de la interfaz (en formato hexadecimal, ej: `#0c1a78`).
     *   **CHAT_SALUDO_ASISTENTE**: Configura el mensaje de bienvenida que el usuario verá al abrir el chat.
 
-> ⚠️ **Nota sobre errores 403 y proyectos "Restringidos / Unavailable" (frecuente en cuentas Workspace/Educación)**:
+> ⚠️ **Nota sobre posibles errores 403 o proyectos marcados como "Restringido / Unavailable"**:
 > 
-> Si al realizar peticiones obtienes el error *"Your project has been denied access" (403)* o tu proyecto figura como **"Unavailable"** o **"Restringido"** en Google AI Studio, indica que Google ha aplicado un bloqueo o *flag* de seguridad/política sobre tu cuenta o proyecto.
+> En ocasiones puntuales (observado en alguna cuenta de Google Workspace / Educación), las llamadas a la API pueden responder con el error *"Your project has been denied access" (403)* o el proyecto puede figurar como **"Unavailable"** o **"Restringido"** en Google AI Studio.
 > 
-> Tras consultar con el soporte de Google, la causa habitual es que Google exige **configurar y vincular una cuenta de facturación (*Billing*) en el proyecto de Google Cloud** para levantar la restricción y habilitar el acceso a la API (incluso si se va a utilizar dentro de los límites de la cuota gratuita). 
+> El diagnóstico de esta incidencia no es concluyente, pero según indicaciones del soporte de Google, podría deberse a algún tipo de restricción o *flag* aplicado por la plataforma a nivel de cuenta o proyecto. En algunos casos, parece requerirse la **vinculación de una cuenta de facturación (*Billing*) en Google Cloud** para levantar dicho bloqueo, aunque la causa exacta puede variar según la organización.
 > 
-> Para solucionarlo:
-> 1. Comprueba los avisos/banners en la página de proyectos de AI Studio y en la sección de **Facturación de Google Cloud Console**.
-> 2. Vincula una cuenta de facturación a tu proyecto de GCP para desbloquear el estado del proyecto.
-> 3. Si por políticas de tu organización educativa no puedes asociar facturación directa, puedes probar el método alternativo con cuenta de servicio: [ver guía en el apéndice](#-apéndice-solución-para-proyectos-restringidos-o-cuentas-educativas-error-403).
+> Si te encuentras con este escenario, algunas posibles vías a explorar:
+> 1. Revisar si existen avisos o advertencias en la consola de Google AI Studio o en **Google Cloud Console > Facturación**.
+> 2. Si la política de tu cuenta lo permite, probar a asociar una cuenta de facturación al proyecto de GCP.
+> 3. Como alternativa experimental, intentar generar una clave mediante cuenta de servicio: [ver notas en el apéndice](#-apéndice-posible-alternativa-para-proyectos-restringidos-o-error-403).
 
 #### 3. Carga de conocimiento
 *   Si usas el modo RAG, selecciona **🤖 SheetsBot > 🔄 Sincronizar Conocimiento**.
@@ -163,20 +163,20 @@ Si tienes sugerencias o encuentras errores, por favor abre un *issue* o envía u
 
 ---
 
-### 📝 Apéndice: Solución para proyectos restringidos o cuentas educativas (Error 403)
+### 📝 Apéndice: Posible alternativa para proyectos restringidos o error 403
 
-Si tu proyecto de Google AI Studio o cuenta (común en dominios educativos) tiene un estado de bloqueo o restricción (*Unavailable*) y obtienes errores 403, puedes crear una clave vinculada a una cuenta de servicio en Google Cloud Console siguiendo este procedimiento:
+Si tu proyecto de Google AI Studio figura con estado restringido (*Unavailable*) o experimentas errores 403 no aclarados, una posible alternativa a explorar es crear una clave de API asociada a una cuenta de servicio directamente desde Google Cloud Console:
 
-1. Accede a [proyectos de Google Cloud](https://console.cloud.google.com/projectcreate) y crea uno nuevo.
+1. Accede a [proyectos de Google Cloud](https://console.cloud.google.com/projectcreate) y crea uno nuevo (o selecciona uno existente).
 2. Ve a **APIs y servicios > Biblioteca**, busca **Gemini API** y actívala.
-3. En el menú lateral, entra en **Credenciales** (no en el panel de la API).
-4. Pulsa **Crear credenciales > Cuenta de servicio** y dale un nombre (el resto de opciones por defecto).
+3. En el menú lateral, entra en **Credenciales**.
+4. Pulsa **Crear credenciales > Cuenta de servicio** y dale un nombre identificativo.
 5. Pulsa **Crear credenciales > Clave de API**.
-6. En el panel lateral derecho:
+6. En el panel lateral de configuración de la clave:
    - Marca **"Autenticar las llamadas a la API a través de una cuenta de servicio"**.
    - Selecciona la **cuenta de servicio** que acabas de crear.
    - En el selector de API, elige **Gemini API** y pulsa **Crear**.
-7. Copia esa clave y pégala en la configuración de SheetsBot. (Si el proyecto aún exige facturación para llamadas de la API, deberás asociar una cuenta de facturación en GCP).
+7. Copia esa clave y pruébala en la configuración de SheetsBot. *(Ten en cuenta que si el bloqueo de la cuenta persiste o se requiere facturación activa en GCP, este procedimiento podría requerir también asociar una cuenta de facturación).*
 
 <p align="center">
   <img src="assets/api-key-gcp-edu.png" alt="Configuración de clave API en GCP para cuentas educativas" width="500">
