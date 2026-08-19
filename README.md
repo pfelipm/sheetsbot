@@ -65,7 +65,7 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
 
 6.  **Asistente de despliegue guiado**: Un diálogo interactivo que acompaña paso a paso en la publicación de la WebApp, guarda la URL de forma segura en las propiedades del script, genera accesos directos y códigos QR (con opción de ampliación en nueva pestaña para proyectar en aulas o reuniones).
     <p align="center">
-      <img src="assets/asistente-despliegue.png" alt="Asistente de Despliegue de SheetsBot" width="500">
+      <img src="assets/asistente-despliegue.png?v=1.1" alt="Asistente de Despliegue de SheetsBot" width="500">
     </p>
 
 7.  **Arquitectura robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos.
