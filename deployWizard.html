@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <!-- Importar Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Importar Iconos de Google -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+      body { 
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        padding: 0; 
+        margin: 0; 
+        color: #333; 
+        background-color: #f8f9fa;
+        overflow: hidden;
+      }
+      .header-container {
+        background-color: #0c1a78;
+        padding: 14px 20px;
+        color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .header-container i { font-size: 24px; }
+      .header-container span { font-size: 17px; font-weight: 600; }
+      
+      #main-wrapper {
+        padding: 16px 20px 20px 20px;
+        height: calc(100vh - 54px);
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+      }
+
+      .content-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        padding: 16px 20px;
+        margin-bottom: 12px;
+      }
+
+      .step-item {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 14px;
+        align-items: flex-start;
+      }
+
+      .step-badge {
+        background: #0c1a78;
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .step-text {
+        font-size: 13.5px;
+        line-height: 1.45;
+        color: #3c4043;
+      }
+
+      .step-text b {
+        color: #1a73e8;
+      }
+
+      .url-box-container {
+        background: #f1f3f4;
+        border-radius: 6px;
+        padding: 12px 14px;
+        margin-top: 10px;
+        margin-bottom: 12px;
+      }
+
+      .url-input-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .url-input-row input {
+        background: white !important;
+        border: 1px solid #dadce0 !important;
+        border-radius: 4px !important;
+        padding: 0 10px !important;
+        height: 38px !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        font-size: 13px !important;
+        color: #202124 !important;
+      }
+
+      .btn-primary {
+        background-color: #1a73e8 !important;
+        text-transform: none !important;
+        font-weight: 500;
+        border-radius: 4px;
+        height: 38px;
+        line-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn-success {
+        background-color: #188038 !important;
+        text-transform: none !important;
+        font-weight: 500;
+        border-radius: 4px;
+        height: 38px;
+        line-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .active-chat-section {
+        border-top: 1px solid #e8eaed;
+        padding-top: 14px;
+        margin-top: 10px;
+      }
+
+      .qr-flex {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 10px;
+        background: #f8f9fa;
+        border: 1px solid #e8eaed;
+        border-radius: 6px;
+        padding: 12px;
+      }
+
+      .qr-img {
+        width: 100px;
+        height: 100px;
+        border-radius: 4px;
+        background: white;
+        padding: 4px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+
+      .footer-controls {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      }
+
+      .tip-box {
+        background: #e8f0fe;
+        border-left: 4px solid #1a73e8;
+        padding: 8px 12px;
+        border-radius: 0 4px 4px 0;
+        font-size: 12px;
+        color: #174ea6;
+        margin-top: 12px;
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header-container">
+      <i class="material-icons">rocket_launch</i>
+      <span>Asistente de Despliegue de SheetsBot</span>
+    </div>
+    
+    <div id="main-wrapper">
+      <div class="content-card">
+        
+        <!-- Pasos para desplegar -->
+        <div class="step-item">
+          <div class="step-badge">1</div>
+          <div class="step-text">
+            En la barra superior de Sheets, abre <b>Extensiones > Apps Script</b>.
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-badge">2</div>
+          <div class="step-text">
+            Arriba a la derecha, pulsa el botón azul <b>Implementar > Nueva implementación</b>.
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-badge">3</div>
+          <div class="step-text">
+            En el engranaje ⚙️ elige <b>Aplicación web</b>. Configura:<br>
+            • <i>Ejecutar como:</i> <b>Yo</b><br>
+            • <i>Quién tiene acceso:</i> <b>Cualquiera</b> (anónimo/público) o <b>Tu dominio</b> (usuarios con Google Workspace).
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-badge">4</div>
+          <div class="step-text">
+            Pulsa <b>Implementar</b>, copia la <b>URL de la aplicación web</b> (termina en <code>/exec</code>) y pégala aquí:
+          </div>
+        </div>
+
+        <!-- Caja para guardar URL -->
+        <div class="url-box-container">
+          <div class="url-input-row">
+            <input type="url" id="webapp-url-input" placeholder="https://script.google.com/macros/s/.../exec" value="<?= currentUrl ?>">
+            <button id="btn-save" class="btn waves-effect waves-light btn-primary" onclick="handleSaveUrl()">
+              <i class="material-icons left" style="font-size: 18px; margin-right: 4px;">save</i>
+              Guardar
+            </button>
+          </div>
+        </div>
+
+        <!-- Sección activa si ya hay URL -->
+        <div id="active-section" class="active-chat-section" style="display: <?= currentUrl ? 'block' : 'none' ?>;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn waves-effect waves-light btn-success" onclick="openWebApp()">
+              <i class="material-icons left" style="font-size: 18px; margin-right: 4px;">chat</i>
+              Abrir Chatbot
+            </button>
+            <button class="btn waves-effect waves-light btn-primary" style="background-color: #5f6368 !important;" onclick="copyWebAppUrl()">
+              <i class="material-icons left" style="font-size: 18px; margin-right: 4px;">content_copy</i>
+              Copiar enlace
+            </button>
+          </div>
+
+          <div class="qr-flex">
+            <img id="qr-code-img" class="qr-img" src="<?= currentUrl ? 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(currentUrl) : '' ?>" alt="Código QR del Chatbot">
+            <div style="font-size: 12.5px; color: #5f6368; line-height: 1.4;">
+              <b style="color: #202124;">Acceso directo con móvil:</b><br>
+              Escanea este código QR con la cámara de tu teléfono o tablet para abrir e interactuar con el chatbot de inmediato.
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          💡 <b>¿Has realizado cambios en el código?</b> Ve a <i>Implementar > Administrar implementaciones</i>, pulsa el icono de editar ✏️, selecciona <b>Versión: Nueva versión</b> y pulsa <b>Implementar</b> para publicar las modificaciones.
+        </div>
+
+      </div>
+
+      <div class="footer-controls">
+        <button class="btn-flat waves-effect" onclick="google.script.host.close()">Cerrar</button>
+      </div>
+    </div>
+
+    <!-- Scripts de Materialize y lógica -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+      function handleSaveUrl() {
+        const input = document.getElementById('webapp-url-input');
+        const url = input.value.trim();
+        const btn = document.getElementById('btn-save');
+        
+        btn.disabled = true;
+        btn.innerHTML = '<i class="material-icons left" style="font-size: 18px; margin-right: 4px;">hourglass_empty</i> Guardando...';
+
+        google.script.run
+          .withSuccessHandler((res) => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="material-icons left" style="font-size: 18px; margin-right: 4px;">save</i> Guardar';
+            
+            if (res.success) {
+              M.toast({html: '✅ URL guardada correctamente', classes: 'green darken-1'});
+              const activeSection = document.getElementById('active-section');
+              if (res.url) {
+                activeSection.style.display = 'block';
+                document.getElementById('qr-code-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(res.url);
+              } else {
+                activeSection.style.display = 'none';
+              }
+            } else {
+              M.toast({html: '❌ ' + res.error, classes: 'red darken-2'});
+            }
+          })
+          .withFailureHandler((err) => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="material-icons left" style="font-size: 18px; margin-right: 4px;">save</i> Guardar';
+            M.toast({html: '❌ Error: ' + err.message, classes: 'red darken-2'});
+          })
+          .saveWebAppUrl(url);
+      }
+
+      function openWebApp() {
+        const url = document.getElementById('webapp-url-input').value.trim();
+        if (url) {
+          window.open(url, '_blank');
+        }
+      }
+
+      function copyWebAppUrl() {
+        const input = document.getElementById('webapp-url-input');
+        const url = input.value.trim();
+        if (!url) return;
+        
+        navigator.clipboard.writeText(url).then(() => {
+          M.toast({html: '📋 Enlace copiado al portapapeles', classes: 'blue darken-1'});
+        }).catch(() => {
+          input.select();
+          document.execCommand('copy');
+          M.toast({html: '📋 Enlace copiado al portapapeles', classes: 'blue darken-1'});
+        });
+      }
+    </script>
+  </body>
+</html>

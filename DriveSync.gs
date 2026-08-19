@@ -275,13 +275,84 @@ const VERSION = 'v1.0 (mayo 2026)';
 function onOpen() {
   const ui = SpreadsheetApp.getUi();
   ui.createMenu('🤖 SheetsBot')
-      .addItem('🚀 Inicializar Hoja', 'setupSheet')
+      .addItem('💬 Abrir Chatbot', 'openChatbot')
+      .addItem('🚀 Desplegar WebApp', 'showDeployWizard')
+      .addSeparator()
+      .addItem('✨ Inicializar Hoja', 'setupSheet')
       .addSeparator()
       .addItem('🔄 Sincronizar Conocimiento', 'syncKnowledgeBase')
       .addItem('⚙️ Gestionar Conocimiento', 'showStoreManager')
       .addSeparator()
       .addItem('ℹ️ Acerca de', 'showAbout')
       .addToUi();
+}
+
+/**
+ * Abre el chatbot en una nueva pestaña si la URL está guardada,
+ * o muestra el asistente de despliegue si aún no se ha configurado.
+ */
+function openChatbot() {
+  const url = getSavedWebAppUrl();
+  if (url) {
+    const html = HtmlService.createHtmlOutput(
+      `<script>
+        window.open('${url}', '_blank');
+        google.script.host.close();
+      </script>
+      <div style="font-family:sans-serif; text-align:center; padding:20px;">
+        <p>Abriendo Chatbot en una nueva pestaña...</p>
+        <p><a href="${url}" target="_blank" style="color:#1a73e8; text-decoration:none; font-weight:bold;">Haz clic aquí si no se abre automáticamente</a></p>
+      </div>`
+    ).setWidth(350).setHeight(120);
+    SpreadsheetApp.getUi().showModalDialog(html, 'Abriendo SheetsBot');
+  } else {
+    showDeployWizard();
+  }
+}
+
+/**
+ * Abre el Asistente de Despliegue de la WebApp.
+ */
+function showDeployWizard() {
+  const template = HtmlService.createTemplateFromFile('deployWizard');
+  template.currentUrl = getSavedWebAppUrl() || '';
+  const html = template.evaluate()
+      .setWidth(580)
+      .setHeight(650);
+  SpreadsheetApp.getUi().showModalDialog(html, ' ');
+}
+
+/**
+ * Obtiene la URL de la WebApp guardada en las propiedades del script.
+ */
+function getSavedWebAppUrl() {
+  return PropertiesService.getScriptProperties().getProperty('WEBAPP_URL') || '';
+}
+
+/**
+ * Guarda la URL de la WebApp en las propiedades del script tras validarla.
+ */
+function saveWebAppUrl(url) {
+  try {
+    const trimmedUrl = (url || '').trim();
+    if (!trimmedUrl) {
+      PropertiesService.getScriptProperties().deleteProperty('WEBAPP_URL');
+      return { success: true, url: '' };
+    }
+    
+    // Validación básica de URL de Apps Script WebApp
+    if (!trimmedUrl.startsWith('https://script.google.com/macros/s/') && !trimmedUrl.startsWith('https://script.google.com/a/')) {
+      return { 
+        success: false, 
+        error: 'La URL debe comenzar por https://script.google.com/macros/s/...' 
+      };
+    }
+    
+    PropertiesService.getScriptProperties().setProperty('WEBAPP_URL', trimmedUrl);
+    return { success: true, url: trimmedUrl };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
 }
 
 /**
