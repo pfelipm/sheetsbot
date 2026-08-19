@@ -12,7 +12,7 @@
 function callGemini(prompt, history = []) {
   const config = getConfig();
   const apiKey = config.API_KEY;
-  const model = config.MODELO || 'gemini-3.1-flash-lite';
+  const model = config.MODELO || 'gemini-flash-latest';
   
   if (!apiKey) {
     throw new Error('La API_KEY no está configurada en la pestaña de Configuración.');
