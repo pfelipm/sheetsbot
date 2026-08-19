@@ -65,7 +65,7 @@ A diferencia de otros asistentes genéricos, **SheetsBot** está diseñado para 
 
 6.  **Asistente de despliegue guiado**: Un diálogo interactivo que acompaña paso a paso en la publicación de la WebApp, guarda la URL de forma segura en las propiedades del script, genera accesos directos y códigos QR (con opción de ampliación en nueva pestaña para proyectar en aulas o reuniones).
     <p align="center">
-      <img src="assets/asistente-despliegue.png" alt="Asistente de Despliegue de SheetsBot" width="500">
+      <img src="assets/diálogo-asistente-despliegue.png" alt="Asistente de Despliegue de SheetsBot" width="500">
     </p>
 
 7.  **Arquitectura robusta**: Incluye lógica de **Binary Exponential Backoff** para manejar reintentos automáticos.
@@ -79,6 +79,8 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 
 > 👉 **[Plantilla de SheetsBot](https://docs.google.com/spreadsheets/d/1LMaOotpm1fHamoVXGhtQkSRy1_HMEDtNSXfAIrN9IRY/edit?usp=sharing)**
 
+Si partes de una hoja en blanco con el código instalado, puedes inicializarla desde **🤖 SheetsBot > ✨ Inicializar hoja** para generar automáticamente la estructura, desplegables y validaciones.
+
 #### 2. Configuración del bot
 
 > ⚠️ **ADVERTENCIA CRÍTICA DE PRIVACIDAD**
@@ -89,8 +91,8 @@ La forma más rápida de empezar es duplicar esta plantilla, que ya incorpora to
 
 *   **Ajustes de inteligencia**:
     *   **API_KEY**: Obtén tu clave en [Google AI Studio](https://aistudio.google.com/api-keys).
-    *   **MODELO**: Elige el modelo (ej: `gemini-3.1-flash-lite`). Puedes consultar la lista completa de [modelos y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations) en la documentación oficial o usar este [dashboard de modelos de Gemini](https://pfelipm.github.io/gemini-models/) para una comparativa visual y actualizada.
-    *   **THINKING_LEVEL**: Define el nivel de razonamiento (ej: `low`). Para la mayoría de casos de uso, optimizar la velocidad de respuesta y **exprimir al máximo el nivel gratuito de la API**, se recomienda utilizar el modelo `gemini-3.1-flash-lite` con un nivel `low`.
+    *   **MODELO**: Elige el modelo (ej: `gemini-flash-lite-latest`). Puedes consultar la lista completa de [modelos y sus fechas de disponibilidad o cierre](https://ai.google.dev/gemini-api/docs/deprecations) en la documentación oficial o usar este [dashboard de modelos de Gemini](https://pfelipm.github.io/gemini-models/) para una comparativa visual y actualizada.
+    *   **THINKING_LEVEL**: Define el nivel de razonamiento (ej: `low`). Para la mayoría de casos de uso, optimizar la velocidad de respuesta y **exprimir al máximo el nivel gratuito de la API**, se recomienda utilizar el modelo `gemini-flash-lite-latest` con un nivel `low`.
     *   **MODO_RAG**: Activa el checkbox si quieres que el bot use tus documentos de Drive.
     *   **ID_CARPETA_DRIVE**: Pega el ID de la carpeta donde guardas tus documentos de conocimiento.
     *   **Conocimiento**: El chatbot "sabe" todo lo que el modelo de Gemini seleccionado conoce de forma nativa. Al activar el **modo RAG**, este conocimiento se enriquece con tus propios contenidos. En este sentido, SheetsBot se comporta de forma similar a una **Gema de Gemini** a la que se le han facilitado archivos en su definición, más que a una aplicación de RAG estricto como NotebookLM.
