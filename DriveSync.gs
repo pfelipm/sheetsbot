@@ -119,6 +119,7 @@ function getFilesToSync() {
       fileList.push({ 
         id: file.getId(), 
         name: fileName,
+        url: file.getUrl(),
         status: syncStatus,
         geminiDocName: geminiDocName,
         lastUpdatedText: file.getLastUpdated() ? file.getLastUpdated().toLocaleString() : ''

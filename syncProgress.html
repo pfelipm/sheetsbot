@@ -78,6 +78,32 @@
         color: #202124;
       }
 
+      .file-name-link {
+        color: #202124;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        transition: color 0.15s ease;
+      }
+      .file-name-link:hover {
+        color: #1a73e8;
+        text-decoration: underline;
+      }
+      .file-name-link i {
+        font-size: 13px;
+        color: #5f6368;
+        opacity: 0.7;
+      }
+      .file-name-link:hover i {
+        color: #1a73e8;
+        opacity: 1;
+      }
+
       .status-badges-container {
         display: flex;
         align-items: center;
@@ -390,7 +416,10 @@
             <div class="file-item sync-pending" id="file-row-${i}">
               <div class="file-info">
                 <i class="material-icons tiny" id="icon-${i}" style="color: #70757a;">insert_drive_file</i>
-                <span class="file-name-text" title="${f.name}">${f.name}</span>
+                <a href="${f.url || '#'}" target="_blank" class="file-name-link" title="Abrir en Google Drive: ${f.name}">
+                  <span>${f.name}</span>
+                  <i class="material-icons">open_in_new</i>
+                </a>
               </div>
               <div class="status-badges-container">
                 ${badgeHtml}
