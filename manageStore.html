@@ -285,6 +285,8 @@
         html += '</tbody></table></div>';
         container.innerHTML = html;
         footer.style.display = 'flex';
+        footer.style.opacity = '1';
+        footer.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
       }
 
       function selectAll(val) {
@@ -304,9 +306,10 @@
 
         customConfirm(`¿Estás seguro de que deseas eliminar <b>${selectedChecks.length}</b> archivo(s)?`, async () => {
           // Desactivar controles
-          document.querySelectorAll('.btn, .doc-check').forEach(el => el.disabled = true);
+          document.querySelectorAll('.btn, .btn-flat, .doc-check').forEach(el => el.disabled = true);
           document.querySelector('.footer-actions').style.opacity = '0.5';
-          document.querySelector('.controls').style.opacity = '0.5';
+          const controls = document.querySelector('.controls');
+          if (controls) controls.style.opacity = '0.5';
 
           let successCount = 0;
           let errorCount = 0;
@@ -384,6 +387,11 @@
       }
 
       function showError(err) {
+        const footer = document.getElementById('footer-container');
+        if (footer) {
+          footer.style.opacity = '1';
+          footer.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
+        }
         customAlert('<b>Error</b>: ' + err.message);
         loadDocuments();
       }
