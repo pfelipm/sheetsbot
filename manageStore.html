@@ -445,6 +445,13 @@
         const footer = document.getElementById('footer-container');
         const selectionControls = document.getElementById('selection-controls');
         
+        // Re-habilitar botón Añadir documento y controles de la barra superior
+        const topBar = document.querySelector('.top-bar');
+        if (topBar) {
+          topBar.style.opacity = '1';
+          topBar.querySelectorAll('button, .btn, .btn-flat').forEach(el => el.disabled = false);
+        }
+
         if (!documents || documents.length === 0) {
           selectionControls.style.display = 'none';
           container.innerHTML = `
