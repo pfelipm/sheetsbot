@@ -24,7 +24,7 @@ function syncKnowledgeBase() {
   if (!folderId) {
     ui.alert(
       'Carpeta de Drive no configurada',
-      'Para sincronizar una carpeta completa de Drive debes indicar su ID en la pestaña «Configuración».\n\n💡 Si deseas añadir documentos individuales (desde tu equipo o mediante enlace de Drive), puedes hacerlo desde el menú:\n🤖 SheetsBot > ⚙️ Gestionar conocimiento.',
+      'Para sincronizar una carpeta completa de Drive debes indicar su ID en la pestaña «Configuración».\n\n💡 Si deseas añadir documentos individuales (desde tu equipo o mediante enlace de Drive), puedes hacerlo desde el menú:\n\n🤖 SheetsBot > ⚙️ Gestionar conocimiento.',
       ui.ButtonSet.OK
     );
     return;
