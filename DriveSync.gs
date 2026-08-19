@@ -267,7 +267,7 @@ function uploadFileToGeminiStore(file, storeName, apiKey) {
   }
 }
 
-const VERSION = 'v1.0 (mayo 2026)';
+const VERSION = 'v1.0 (agosto 2026)';
 
 /**
  * Añade el menú a la hoja de cálculo al abrir.
